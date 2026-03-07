@@ -28,6 +28,9 @@ async def mostrar_presentacion(request: Request):
 async def mostrar_ubicacion(request: Request):
     return templates.TemplateResponse("ubicacion.html", {"request": request})
 
+@app.get("/health")
+def health():
+    return {"status": "ok"}
 
 @app.post("/registro", response_class=HTMLResponse)
 def proceso_turno(nombre: Annotated[str, Form()], 
@@ -58,4 +61,5 @@ def proceso_turno(nombre: Annotated[str, Form()],
         "mensaje": f"¡Genial {nombre}! Turno registrado."
     })
     
+
     
