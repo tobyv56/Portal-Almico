@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <!--metadatos-->
+    <meta charset="UTF-8">
+    <meta name="author" content="Tobias Velez">
+    <meta name="description" content="terapia vibraciones">
+    <meta name="keywords" content="terapia,reiki,energia,alma">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--css-->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+
+    <!--logo-->
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', path='logo.svg')}}">
+
+    <!--boostrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!--titulo-->
+    <title>quienes somos? - Portal Almico</title>
+
+    <!--google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+</head>
+    
+<body>
+ 
+ <!--boostrap js-->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+ <!--barra navegacion-->
+ <nav class="navbar navbar-expand-md shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{url_for('mostrar_inicio')}}"> <!--#= principio de la pagina-->
+                <img src="{{ url_for('static', path='logo.svg') }}" alt="portafolio web" width="50" class="logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse fs-5" id="navbar-toggler">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mostrar_presentacion')}}"  aria-expanded="false">quienes somos?</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mostrar_ubicacion')}}" aria-expanded="false">ubicacion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('mostrar_cursos')}}" aria-expanded="false">cursos</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ url_for('mostrar_reservas')}}" aria-expanded="false">reserva turnos</a>
+                    </li>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+  <!-- 1ra presentacion -->
+
+  <section class="p-0">
+    <h1 class="titulos">Quienes Somos?</h1>
+        <div class="container-fluid overflow-hidden secciones">
+            <div class="row align-items-center">
+                <div class="col img-fluid">
+                    <img src="{{url_for('static', path='joseluis-819x1024.jpeg')}}" 
+                    alt="jose-luis">
+                </div>
+            <div class="col-md-7 text-start">
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Hola, Soy José Luis, antes de contarte sobre mí, quiero darte la Bienvenida a este hermoso espacio que fue creado para vivir experiencias únicas, muy personales e inigualables, para ayudarte a sanar en todos los aspectos y encontrar en vos lo que necesitas para continuar disfrutando de este plano maravilloso.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    La inquietud de querer ayudar a las personas me hizo buscar distintas alternativas, El Reiki Usui, el cual me abrió distintas opciones que impactaron directamente con mi persona, descubriendo y desarrollando el potencial que en mi rige, no existen las palabras rebuscadas ni los límites para que puedas entender el poder de la energía universal.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    soy un Ariano sencillo y amable, respetuoso, mente abierta, creyente del que todo se puede y el límite es el infinito, porta voz del amor propio y del prójimo, Padre de una Hija a la cual admiro por cada enseñanza que me brinda, y compañero de vida de una Persona Maravillosa, un ser talentoso y genuino. Juntos los tres formamos una familia no convencional, aprendiendo de cada uno día a día desde el amor y el respeto.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Soy practicante del Budismo, aprendiendo nuevamente de lo que la vida me presenta, buscador de nuevas prácticas de sanación para continuar con el proceso de ayudar al otro, recordando el pasado lejano e infinito para realimentar la energía.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Te espero para compartir juntos la experiencia del Reiki Usui.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Muchas Gracias!!!
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                  <a href=""></a>
+                </p>
+            </div>
+        </div>  
+  </section>
+
+  <!-- 2da presentacion -->
+   
+  <section class="p-0">
+    <div class="container">
+        <div class="row">
+
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+  </section>
+
+  <!--footer-->
+
+  <footer class="navbar">
+  <div class="container-fluid overflow-hidden shadow-sm">
+    <div class="row text-center align-items-center">
+      
+      <div class="col d-flex flex-column align-items-center">
+        <h2 class="fw-bold titulo-footer">Numero Telefono</h2>
+        <p class="fs-5 text-footer">011 3311-3647</p>
+      </div>
+
+      <div class="col d-flex flex-column align-items-center">
+        <h2 class="fw-bold titulo-footer">Email</h2>
+        <p class="fs-5 text-footer">lotosblancosreiki@gmail.com</p>
+      </div>
+
+      <div class="col d-flex flex-column align-items-center">
+        <h2 class="fw-bold titulo-footer">Direccion</h2>
+        <p class="fs-5 text-footer">
+          Calle 142, Número 1032 <br> Entre 10 y 11, Berazategui
+        </p>
+      </div>
+
+      <div class="col d-flex justify-content-center">
+        <img src="{{ url_for('static', path='logo.svg') }}" width="200">
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
+
+       
