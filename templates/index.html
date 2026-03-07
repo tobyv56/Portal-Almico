@@ -172,6 +172,10 @@
 
 <script>
 
+  setInterval(()=>{
+    fetch("/health")
+    }, 600000)
+    
   const res = await fetch(`/`)
   const data = await res.json()
 
@@ -180,5 +184,6 @@
 
 
 </script>
+
 
 </html>
