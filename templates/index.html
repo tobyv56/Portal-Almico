@@ -41,16 +41,16 @@
             <div class="collapse navbar-collapse fs-5" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mostrar_presentacion')}}"  aria-expanded="false">quienes somos?</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_presentacion')}}"  aria-expanded="false">Quienes somos?</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mostrar_ubicacion')}}" aria-expanded="false">ubicacion</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_ubicacion')}}" aria-expanded="false">Ubicacion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mostrar_cursos')}}" aria-expanded="false">cursos</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_cursos')}}" aria-expanded="false">Cursos</a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{ url_for('mostrar_reservas')}}" aria-expanded="false">reserva turnos</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_reservas')}}" aria-expanded="false">Reserva Turnos</a>
                     </li>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>
@@ -65,7 +65,7 @@
     </nav>
    
 <!--section hero(section pedir turno)-->
-<section class="container my-5 p-0 overflow-hidden rounded-5 shadow-sm bg-white"> <!--my= margin eje y, p0 quita el espacio del padding,rounded=border-radius  -->
+<section class="container my-5 p-0 py-overflow-hidden rounded-5 shadow-sm bg-white"> <!--my= margin eje y, p0 quita el espacio del padding,rounded=border-radius  -->
   <div class="row g-0 align-items-center">
     <div class="col-md-5 p-5">
       <h1 class="display-4 fw-bold mb-2 text-principal ">Portal Álmico</h1> <!--fw-bold= grosor de la fuente, mb= margin boton-->
@@ -84,7 +84,7 @@
 </section>
 
 <!--section hero(section que hacemos?)-->
-<section class="container-fluid overflow-hidden shadow-sm">
+<section class="container-fluid py-overflow-hidden shadow-sm">
   <div class="row secciones">
     <h1 class="fw-bold titulos">
         que hacemos?
@@ -98,13 +98,13 @@
     <div class="col">
       <img src="{{url_for('static', path='feather.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-2 rounded-circle border border-dark border-3">
       <h2 class="text-center mb-2 actividad">
-        Registros Akashicos
+        Pendulo Hebreo
       </h2>
     </div>
     <div class="col">
       <img src="{{url_for('static', path='leaf.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-2 rounded-circle border border-dark border-3">
       <h2 class="text-center mb-2 actividad">
-        Regresiones a Vidas pasadas
+        Regresiones A Vidas asadas
       </h2>
     </div>
     <div class="col">
@@ -130,11 +130,44 @@
 
 <!--cursos-->
 <section>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h1>puto</h1>
+  <div class="container-fluid py-overflow-hidden shadow-sm">
+    <h2>cursos recientes:</h2>
+    <div class="row"> 
+      {% if cursos|length >= 3 %}
+      <div class="col-md-4 d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+          <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{cursos[0].nombrecurso}}</h5>
+              <p class="card-text">{{cursos[0].descripcion}}</p>
+              <p class="card-text">fecha: {{cursos[0].fecha}} - hora: {{cursos[0].hora}}</p>
+              <a href="#" class="btn btn-primary">Inscribirse aca</a>
+            </div>
+        </div>
       </div>
+      <div class="col-md-4 d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+          <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{cursos[1].nombrecurso}}</h5>
+              <p class="card-text">{{cursos[1].descripcion}}</p>
+              <p class="card-text">fecha: {{cursos[1].fecha}} - hora: {{cursos[1].hora}}</p>
+              <a href="#" class="btn btn-primary">Inscribirse aca</a>
+            </div>
+        </div>
+      </div>
+      <div class="col-md-4 d-flex justify-content-center">
+        <div class="card" style="width: 18rem;">
+          <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{cursos[2].nombrecurso}}</h5>
+              <p class="card-text">{{cursos[2].descripcion}}</p>
+              <p class="card-text">fecha: {{cursos[2].fecha}} - hora: {{cursos[2].hora}}</p>
+              <a href="#" class="btn btn-primary">Inscribirse aca</a>
+            </div>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </div>
 </section>
@@ -172,18 +205,16 @@
 
 <script>
 
-  setInterval(()=>{
-    fetch("/health")
-    }, 600000)
-    
   const res = await fetch(`/`)
   const data = await res.json()
 
   console.log(data)
 
-
+  setInterval(()=>{
+    fetch("/health")
+  }, 600000)
 
 </script>
 
-
 </html>
+
