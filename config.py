@@ -3,7 +3,23 @@ from fastapi.responses import HTMLResponse
 from typing import Annotated
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+import psycopg2
+from psycopg2.extras import RealDictCursor
+import os
+import unicodedata
 
+#bdd
+
+DATABASE_URL ='postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+conn = psycopg2.connect(DATABASE_URL)
+cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+def get_db():
+    conn = psycopg2.connect(DATABASE_URL)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    return conn, cursor
+
+#conexion pagina
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -12,9 +28,27 @@ templates = Jinja2Templates(directory="templates")
 async def mostrar_reservas(request: Request):
     return templates.TemplateResponse("reservas.html", {"request": request})
 
-@app.get("/") 
+@app.get("/", response_class=HTMLResponse) 
 async def mostrar_inicio(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+
+    conn, cursor = get_db()
+    
+    cursor.execute("""SELECT nombrecurso,fecha,hora,descripcion FROM curso
+                      WHERE fecha >= CURRENT_DATE
+                      ORDER BY fecha ASC
+                      LIMIT 3""")
+    
+    cursos = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return templates.TemplateResponse( 
+    "index.html", {
+        "request" : request,
+        "cursos" : cursos
+    }
+    )
 
 @app.get("/cursos") 
 async def mostrar_cursos(request: Request):
@@ -60,6 +94,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
         "request": request,
         "mensaje": f"¡Genial {nombre}! Turno registrado."
     })
-    
+
+
 
     
