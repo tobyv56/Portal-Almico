@@ -10,6 +10,7 @@ import unicodedata
 from datetime import date, time
 from fastapi.responses import RedirectResponse
 from fastapi import UploadFile, File
+import shutil
 
 #bdd
 
@@ -137,6 +138,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
