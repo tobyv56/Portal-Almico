@@ -7,6 +7,9 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
 import unicodedata
+from datetime import date, time
+from fastapi.responses import RedirectResponse
+from fastapi import UploadFile, File
 
 #bdd
 
@@ -50,9 +53,26 @@ async def mostrar_inicio(request: Request):
     }
     )
 
+#cursos
 @app.get("/cursos") 
 async def mostrar_cursos(request: Request):
     return templates.TemplateResponse("cursos.html", {"request": request})
+
+@app.post("/cursos/creacion", response_class=HTMLResponse)
+async def creacion_cursos(nombreTaller: Annotated[str, Form()],
+                          fecha: Annotated[date, Form()],
+                          hora: Annotated[time, Form()],
+                          descripcion: Annotated[str, Form()],
+                          archivo: UploadFile = File(...)):
+    
+    query = f"INSERT INTO curso (nombrecurso,fecha,hora,descripcion) VALUES (%s,%s,%s,%s)"
+
+    cursor.execute(query,(nombreTaller,fecha,hora,descripcion))
+    conn.commit()
+
+    return RedirectResponse(url="/cursos", status_code=303)
+
+#TODO REVISAR UPLODEAD IMAGEN
 
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
@@ -98,3 +118,8 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
+
+
+    
+
