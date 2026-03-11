@@ -59,35 +59,28 @@ async def mostrar_inicio(request: Request):
 async def mostrar_cursos(request: Request):
     return templates.TemplateResponse("cursos.html", {"request": request})
 
-@app.post("/cursos/creacion", response_class=HTMLResponse)
-async def creacion_cursos(nombreTaller: Annotated[str, Form()],
-                          fecha: Annotated[date, Form()],
-                          hora: Annotated[time, Form()],
-                          descripcion: Annotated[str, Form()],
-                          archivo: UploadFile = File(...)):
-    
-    query = f"INSERT INTO curso (nombrecurso,fecha,hora,descripcion) VALUES (%s,%s,%s,%s)"
-
-    ruta_carpeta = "static/imagenes"
-
+ruta_carpeta = os.path.join("static", "imagenes")
     os.makedirs(ruta_carpeta, exist_ok=True) 
 
-    
-
+    await archivo.seek(0) 
     ruta_archivo = os.path.join(ruta_carpeta, archivo.filename)
 
-                              
+    try:
+        with open(ruta_archivo, "wb") as buffer:
+            shutil.copyfileobj(archivo.file, buffer)
+        
+        query = "INSERT INTO curso (nombrecurso, fecha, hora, descripcion) VALUES (%s, %s, %s, %s)"
+        cursor.execute(query, (nombreTaller, fecha, hora, descripcion))
+        conn.commit()
 
-    with open(ruta_archivo, "wb") as buffer:
+        print(f"✅ Imagen guardada en: {ruta_archivo}")
+        return RedirectResponse(url="/cursos", status_code=303)
 
-        shutil.copyfileobj(archivo.file, buffer)
-    
-    
-    cursor.execute(query,(nombreTaller,fecha,hora,descripcion))
-    conn.commit()
-
-    return RedirectResponse(url="/cursos", status_code=303)
-
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        conn.rollback()
+        return {"error": "No se pudo guardar el taller o la imagen"}
+        
 #TODO REVISAR UPLODEAD IMAGEN
 
 @app.get("/presentacion") 
@@ -138,6 +131,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
