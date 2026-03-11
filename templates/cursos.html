@@ -63,7 +63,61 @@
             </div>
         </div>
     </nav>
+    
+    <!--crud cursos-->
+    <div class="container-fluid mt-4">
+    <p class="d-inline-flex gap-2">
+        <button class="btn btn-outline-light btn-lg rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCrear">
+            Crear Curso
+        </button>
+        <button class="btn btn-outline-danger btn-lg rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEliminar">
+            Eliminar Curso
+        </button>
+    </p>
 
+    <div class="collapse mb-3" id="collapseCrear">
+        <div class="card card-body border-light">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <form action="/cursos/creacion" method="POST" enctype="multipart/form-data">
+                        
+                        <h2 class="col-reservas mb-3">Nombre Taller</h2>
+                        <input type="text" name="nombreTaller" class="form-control w-75 mx-auto mb-4" required>
+
+                        <h2 class="col-reservas mb-3">Imagen</h2>
+                        <div class="w-75 mx-auto mb-3">
+                            <input class="form-control" type="file" name="archivo" accept="image/*" required>
+                        </div>
+
+                            <div class="row w-75 mx-auto">
+                            
+                                <h2 class="col-reservas mb-3">Fecha</h2>
+                                <input type="date" name="fecha" class="form-control" required> <!--type=time elije fecha requiered=not null-->
+                            
+                                <div class="col-reservas mb-3">
+                                    <h2 class="col-reservas mb-3">Hora</h2>
+                                    <input type="time" name="hora" class="form-control" required> <!--type=time elije hora-->
+                                </div>
+                            </div>
+
+                            <h2 class="col-reservas mb-3">Descripción</h2>
+                            <textarea name="descripcion" class="form-control w-75 mx-auto mb-4" rows="3"></textarea>
+
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill">Subir Taller</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="collapse" id="collapseEliminar">
+        <div class="card card-body bg-danger text-white">
+            <h4>Sección para eliminar cursos</h4>
+            <p>Acá podrías poner una lista con botones de "Borrar".</p>
+        </div>
+    </div>
+</div>
+    
     <!--cursos-->
 
     <h2 class="fw-bold fs-1">Cursos Recientes</h2>
@@ -75,9 +129,10 @@
                     <div class="card" style="width: 18rem;">
                         <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+                                <h5 class="card-title">Actividad 1</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fecha: 13-01-26</p>
+                                <a href="#" class="btn btn-primary">Inscribirse</a>
                             </div>
                     </div>
                 </div>
@@ -85,9 +140,10 @@
                     <div class="card" style="width: 18rem;">
                         <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+                                <h5 class="card-title">Actividad 2</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fecha: 16-02-26</p>
+                                <a href="#" class="btn btn-primary">Inscribirse</a>
                             </div>
                     </div>
                 </div>
@@ -95,9 +151,10 @@
                     <div class="card" style="width: 18rem;">
                         <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+                                <h5 class="card-title">Actividad 3</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fecha: 16-04-26</p>
+                                <a href="#" class="btn btn-primary">Inscribirse</a>
                             </div>
                     </div>
                 </div>
@@ -108,9 +165,10 @@
                     <div class="card" style="width: 18rem;">
                         <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+                                <h5 class="card-title">Actividad 4</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fecha: 16-12-26</p>
+                                <a href="#" class="btn btn-primary">Inscribirse</a>
                             </div>
                     </div>
                 </div>
@@ -118,9 +176,10 @@
                     <div class="card" style="width: 18rem;">
                         <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+                                <h5 class="card-title">Actividad 5</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fecha: 31-12-26</p>
+                                <a href="#" class="btn btn-primary">Inscribirse</a>
                             </div>
                     </div>
                 </div>
@@ -128,9 +187,10 @@
                     <div class="card" style="width: 18rem;">
                         <img src="..." class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
+                                <h5 class="card-title">Actividad 6</h5>
                                 <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <p class="card-text">fecha: 26-02-26</p>
+                                <a href="#" class="btn btn-primary">Inscribirse</a>
                             </div>
                     </div>
                 </div>
@@ -168,3 +228,4 @@
     </footer>
 </body>
 </html>
+
