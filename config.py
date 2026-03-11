@@ -68,7 +68,18 @@ async def creacion_cursos(nombreTaller: Annotated[str, Form()],
     query = f"INSERT INTO curso (nombrecurso,fecha,hora,descripcion) VALUES (%s,%s,%s,%s)"
 
     ruta_carpeta = "static/imagenes"
+
     os.makedirs(ruta_carpeta, exist_ok=True) 
+
+    
+
+    ruta_archivo = os.path.join(ruta_carpeta, archivo.filename)
+
+                              
+
+    with open(ruta_archivo, "wb") as buffer:
+
+        shutil.copyfileobj(archivo.file, buffer)
     
     
     cursor.execute(query,(nombreTaller,fecha,hora,descripcion))
@@ -126,6 +137,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
