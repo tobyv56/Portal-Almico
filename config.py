@@ -57,29 +57,25 @@ async def mostrar_inicio(request: Request):
 #cursos
 @app.get("/cursos") 
 async def mostrar_cursos(request: Request):
-    return templates.TemplateResponse("cursos.html", {"request": request})
-
-ruta_carpeta = os.path.join("static", "imagenes")
-    os.makedirs(ruta_carpeta, exist_ok=True) 
-
-    await archivo.seek(0) 
+    ruta_carpeta = os.path.join("static", "imagenes")
+    os.makedirs(ruta_carpeta, exist_ok=True)
+    
+    await archivo.seek(0)
     ruta_archivo = os.path.join(ruta_carpeta, archivo.filename)
-
+    
     try:
         with open(ruta_archivo, "wb") as buffer:
             shutil.copyfileobj(archivo.file, buffer)
-        
+            
         query = "INSERT INTO curso (nombrecurso, fecha, hora, descripcion) VALUES (%s, %s, %s, %s)"
         cursor.execute(query, (nombreTaller, fecha, hora, descripcion))
         conn.commit()
-
-        print(f"✅ Imagen guardada en: {ruta_archivo}")
-        return RedirectResponse(url="/cursos", status_code=303)
-
+        
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
         conn.rollback()
-        return {"error": "No se pudo guardar el taller o la imagen"}
+
+    return RedirectResponse(url="/cursos", status_code=303)
         
 #TODO REVISAR UPLODEAD IMAGEN
 
@@ -131,6 +127,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
