@@ -59,7 +59,7 @@ async def mostrar_inicio(request: Request):
 async def mostrar_cursos(request: Request):
     return templates.TemplateResponse("cursos.html", {"request": request})
     
-@app.get("/cursos/creacion") 
+@app.post("/cursos/creacion") 
 async def mostrar_cursos(request: Request):
     ruta_carpeta = os.path.join("static", "imagenes")
     os.makedirs(ruta_carpeta, exist_ok=True)
@@ -131,6 +131,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
