@@ -55,24 +55,30 @@ async def mostrar_inicio(request: Request):
     )
 
 #cursos
-@app.get("/cursos", response_class=HTMLResponse)
+@app.get("/cursos") 
 async def mostrar_cursos(request: Request):
     return templates.TemplateResponse("cursos.html", {"request": request})
+
+@app.post("/cursos/creacion", response_class=HTMLResponse)
+async def creacion_cursos(nombreTaller: Annotated[str, Form()],
+                          fecha: Annotated[date, Form()],
+                          hora: Annotated[time, Form()],
+                          descripcion: Annotated[str, Form()],
+                          archivo: UploadFile = File(...)):
     
-@app.post("/cursos/creacion") 
-async def mostrar_cursos(request: Request):
     ruta_carpeta = os.path.join("static", "imagenes")
     os.makedirs(ruta_carpeta, exist_ok=True)
     
     await archivo.seek(0)
-    ruta_archivo = os.path.join(ruta_carpeta, archivo.filename)
+    nombre_imagen = f"{uuid.uuid4()}_{archivo.filename}"
+    ruta_archivo = os.path.join(ruta_carpeta, nombre_imagen)
     
     try:
         with open(ruta_archivo, "wb") as buffer:
             shutil.copyfileobj(archivo.file, buffer)
             
-        query = "INSERT INTO curso (nombrecurso, fecha, hora, descripcion) VALUES (%s, %s, %s, %s)"
-        cursor.execute(query, (nombreTaller, fecha, hora, descripcion))
+        query = "INSERT INTO curso (nombrecurso, fecha, hora, descripcion, imagen) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(query, (nombreTaller, fecha, hora, descripcion, nombre_imagen))
         conn.commit()
         
     except Exception as e:
@@ -80,8 +86,6 @@ async def mostrar_cursos(request: Request):
         conn.rollback()
 
     return RedirectResponse(url="/cursos", status_code=303)
-        
-#TODO REVISAR UPLODEAD IMAGEN
 
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
@@ -131,6 +135,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
