@@ -38,7 +38,7 @@ async def mostrar_inicio(request: Request):
 
     conn, cursor = get_db()
     
-    cursor.execute("""SELECT nombrecurso,fecha,hora,descripcion FROM curso
+    cursor.execute("""SELECT nombrecurso,fecha,hora,descripcion,imagen FROM curso
                       WHERE fecha >= CURRENT_DATE
                       ORDER BY fecha ASC
                       LIMIT 3""")
@@ -66,6 +66,8 @@ async def creacion_cursos(nombreTaller: Annotated[str, Form()],
                           hora: Annotated[time, Form()],
                           descripcion: Annotated[str, Form()],
                           archivo: UploadFile = File(...)):
+
+    conn, cursor = get_db()
     
     ruta_carpeta = os.path.join("static", "imagenes")
     os.makedirs(ruta_carpeta, exist_ok=True)
@@ -136,6 +138,7 @@ def proceso_turno(nombre: Annotated[str, Form()],
 
 
     
+
 
 
 
