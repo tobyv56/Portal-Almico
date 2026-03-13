@@ -1,7 +1,17 @@
 /*pagina general*/
 
+html, body{
+    height:100%;
+}
+
 body{
-    background-color: #F2EEE9 !important;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+footer{
+    margin-top:auto;
 }
 
 /*barra de navegacion*/
@@ -22,105 +32,9 @@ body{
     width: 100px;
 }
 
-/*section hero(pedir turno)*/
-
 .nav-link{
     font-size: 3rem !important;
     font-weight: 500;
-}
-
-.imagen-section {
-    background: linear-gradient(
-        to right, 
-        rgba(255, 255, 255, 1) 0%,   /* Blanco sólido al inicio */
-        rgba(255, 255, 255, 1) 15%,  /* Se mantiene sólido solo hasta el 15% */
-        rgba(255, 255, 255, 0) 45%   /* A la mitad ya es totalmente invisible */
-    ), 
-    url('../imagenes/section1.png');
-    
-    background-size: cover;
-    background-position: right center; /* Empuja la foto a la derecha */
-    background-repeat: no-repeat;
-    height: 800px;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.imagen-section h1{
-    text-align: left;
-}
-
-.btn{
-    color: #6F42C1 !important;
-    border-color: #6F42C1 !important;
-}
-
-.btn :hover{
-    background-color: #6F42C1 !important;
-    color: white !important;
-    border-color: #6F42C1 !important;
-}
-
-.text-principal{
-    font-size: 4rem !important;
-}
-
-.leyend-principal{
-    font-size: 2rem !important;
-}
-
-.link {
-    text-decoration: none !important;
-    color: inherit !important; /* Esto hace que el texto sea blanco como el borde del botón */
-    display: block; 
-    width: 100%;
-    height: 100%;
-}
-
-
-/*section hero(actividades)*/
-
-.secciones{
-    background-color: #EBDED1 !important;
-    padding: 2px;
-}
-
-.img-act{
-    object-fit: cover;
-    width: 20px
-}
-
-.actividad{
-    font-size: 4rem !important;
-    margin: 15px;
-}
-
-.desc-actividad{
-    font-size: 2rem !important;
-}
-
-.titulos{
-    font-size: 5rem !important;
-    padding: 10px !important;
-    margin: 10px !important;
-}
-
-/*section hero(presentaciones)*/
-
-.img-presentacion{
-  display: flex;          
-  align-items: flex-start; 
-  gap: 30px;            
-  max-width: 1000px;      
-  margin: 0 auto;
-}
-
-.presentacion-leyenda{
-    font-size: 2rem;
-    gap: 30px;
-    font-size: 2rem;
-    font-family: 'Lato', sans-serif;
 }
 
 /*ubicacion*/
@@ -145,7 +59,7 @@ body{
 
 .btn{
     font-size: 2rem !important; /* Texto bien grande */
-    padding: 5px !important;    /* Mucho más alto y ancho */
+    padding: 20px !important;    /* Mucho más alto y ancho */
     font-weight: 800 !important;  /* Letra bien gruesa */
     text-transform: uppercase;    /* Todo en mayúsculas */
     border-radius: 15px !important;
@@ -242,7 +156,7 @@ body{
     font-size: 3rem !important;
 }
 
-/*cursos*/
+/*talleres*/
 
 .card{
 /* NO fijes el width ni el height exactos aquí */
@@ -288,4 +202,11 @@ body{
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+}
+
+/*talleres proximos*/
+
+.btn-card{
+    font-size: 0.8rem !important;
+    padding: 4px 10px !important;
 }
