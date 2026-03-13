@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--css-->
-    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='quienesSomos.css') }}">
 
     <!--logo-->
     <link rel="icon" type="image/x-icon" href="{{url_for('static', path='logo.svg')}}">
@@ -43,16 +43,16 @@
             <div class="collapse navbar-collapse fs-5" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mostrar_presentacion')}}"  aria-expanded="false">quienes somos?</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_presentacion')}}"  aria-expanded="false">Quienes Somos?</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mostrar_ubicacion')}}" aria-expanded="false">ubicacion</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_ubicacion')}}" aria-expanded="false">Ubicacion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('mostrar_cursos')}}" aria-expanded="false">cursos</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_cursos')}}" aria-expanded="false">Talleres</a>
                     </li>
                     <li>
-                        <a class="nav-link" href="{{ url_for('mostrar_reservas')}}" aria-expanded="false">reserva turnos</a>
+                        <a class="nav-link" href="{{ url_for('mostrar_reservas')}}" aria-expanded="false">Reservas</a>
                     </li>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Action</a></li>
@@ -65,13 +65,102 @@
             </div>
         </div>
     </nav>
+  
+    <section class="pt-5 pb-4">
+        <div class="container-fluid">
+            <h1 class="fw-bold text-center titulos">¿Quiénes somos?</h1>
+        </div>
+    </section>
+    
+  <!--Portal Almico-->
+
+  <section class="py-5">
+    <div class="container-fluid overflow-hidden secciones">
+        
+        <div class="row align-items-center secciones g-5">
+            <div class="col img-fluid">
+
+            </div>
+            <div class="col-md-7 text-start">
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Portal Álmico   
+                    Si llegaste hasta aquí… tal vez no sea casualidad
+                    A veces la vida nos trae hasta ciertos lugares cuando nuestra alma está buscando algo más.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Tal vez estés atravesando un momento de cambio, de preguntas, de búsqueda interior…
+                    o simplemente sentís que algo dentro tuyo necesita sanar, comprender o transformarse.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Portal Álmico nace justamente para eso.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Un espacio creado con amor y conciencia para acompañar procesos de sanación profunda, donde la energía, 
+                    el alma y el corazón encuentran un lugar para expresarse y armonizarse.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Aquí cada encuentro es único, porque cada persona llega con su propia historia, sus emociones y su camino espiritual.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    En Portal Álmico trabajamos con distintas terapias holísticas que ayudan a liberar bloqueos, equilibrar la energía y reconectar con tu verdadera esencia.
+                </p>
+                <h3 class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Entre Ellas:
+                </h3>
+                <ul class="lista-estrellas">
+                    <li>Reiki Usui, Karuna y Angelical</li>
+                    <li>Apertura de Registros Akáshicos</li>
+                    <li>Regresiones a Vidas Pasadas y Memorias Álmicas</li>
+                    <li>Sanación con camilla de Armónicos</li>
+                    <li>Terapia Floral – Flores de Bach</li>
+                    <li>Aromaterapia emocional y energética</li>
+                    <li>Tarot terapéutico y evolutivo</li>
+                    <li>Sanación con péndulo y armonización energética</li>
+                    <li>Medicina China – Acupuntura</li>
+                </ul>
+                <h3 class="fw-bold text-center mt-4 presentacion-leyenda">
+                    También ofrecemos espacios de conexión y expansión interior como:
+                </h3>
+                <ul class="lista-hojas">
+                    <li>Meditaciones grupales e individuales</li>
+                    <li>Meditaciones sonoras con cuencos de cuarzo</li>
+                    <li>Encuentros de armonización energética</li>
+                </ul>
+                <h3 class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Cada experiencia en Portal Álmico está pensada para ayudarte a:
+                </h3>
+                <ul class="lista-lunas">
+                    <li>Liberar emociones y bloqueos</li>
+                    <li>Comprender procesos de vida</li>
+                    <li>Reconectar con tu esencia</li>
+                    <li>Encontrar paz y claridad interior</li>
+                    <li>Despertar tu propia energía de sanación</li>
+                </ul>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Porque muchas veces lo que estamos buscando afuera…
+                    en realidad vive dentro nuestro esperando ser descubierto.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Si estas palabras resonaron con vos…
+                    tal vez tu alma te trajo hasta aquí por una razón.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Portal Álmico
+                    Un espacio para sanar, recordar y reconectar con tu esencia. Donde el Alma recuerda quien es    
+                </p>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+  </section>
 
   <!-- 1ra presentacion -->
 
-  <section class="p-0">
-    <h1 class="titulos">Quienes Somos?</h1>
+  <section class="py-5">
         <div class="container-fluid overflow-hidden secciones">
-            <div class="row align-items-center">
+            <div class="row align-items-center secciones">
                 <div class="col img-fluid">
                     <img src="{{url_for('static', path='joseluis-819x1024.jpeg')}}" 
                     alt="jose-luis">
@@ -104,47 +193,78 @@
 
   <!-- 2da presentacion -->
    
-  <section class="p-0">
-    <div class="container">
-        <div class="row">
+  <section class="py-5">
+        <div class="container-fluid overflow-hidden secciones">
+            <div class="row align-items-center secciones">
+                <div class="col img-fluid">
+                    <img src="{{url_for('static', path='71b0a9ee-6bbc-447e-a3fd-d80a2e70906b.jpg')}}" 
+                    alt="jose-luis">
+                </div>
+            <div class="col-md-7 text-start">
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Hola, soy Cintia.
 
-        </div>
-        <div class="row">
-
-        </div>
-    </div>
+                    Antes de contarte sobre mí, quiero darte la bienvenida a este hermoso espacio, creado con amor para acompañarte a vivir experiencias profundas, personales y transformadoras. Un lugar pensado para que puedas reconectar con tu esencia, sanar distintos aspectos de tu vida y descubrir dentro tuyo las herramientas que necesitas para seguir caminando con mayor conciencia y bienestar.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Desde hace años siento una profunda vocación por acompañar a las personas en sus procesos de sanación y crecimiento interior. Ese llamado me llevó a formarme y a transitar distintos caminos dentro de las terapias holísticas y energéticas, como Reiki, regresiones a vidas pasadas y otras prácticas que ayudan a armonizar cuerpo, mente y espíritu.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Creo profundamente en el poder de la energía, en la capacidad que todos tenemos de sanar y en la importancia de volver a escucharnos. Cada proceso es único, cada persona tiene su propio ritmo, y mi intención es brindarte un espacio de respeto, contención y amor para que puedas transitar tu propio camino.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Me considero una persona sensible, intuitiva y comprometida con lo que hago.
+                    Tengo dos hijos maravillosos, quien me enseñaron mucho y de quienes sigo aprendiendo. Doy gracias al acompañamiento de mi pareja, quien siempre me alento y apoyo en todo lo que enprendia.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Disfruto aprender constantemente, explorar nuevas herramientas de sanación y compartir aquello que puede aportar bienestar a quienes llegan a este espacio.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                    Este lugar nace desde el corazón, con la intención de acompañarte a reconectar con tu propia luz, recordar quién sos y volver a habitar tu vida con más paz, amor y armonía.
+                </p>
+                <p class="fw-bold text-center mt-4 presentacion-leyenda">
+                  Te espero para compartir juntos este camino de sanación y expansión. Muchas gracias por estar acá.
+                </p>
+            </div>
+        </div>  
   </section>
 
   <!--footer-->
 
+  <!--footer-->
+
   <footer class="navbar">
-  <div class="container-fluid overflow-hidden shadow-sm">
-    <div class="row text-center align-items-center">
+        <div class="container overflow-hidden shadow-sm">
+            <div class="row text-center align-items-center">
       
-      <div class="col d-flex flex-column align-items-center">
-        <h2 class="fw-bold titulo-footer">Numero Telefono</h2>
-        <p class="fs-5 text-footer">011 3311-3647</p>
-      </div>
+            <div class="col d-flex flex-column align-items-center">
+                <h2 class="fw-bold titulo-footer">Numero Telefono</h2>
+                <p class="fs-5 text-footer">011 3311-3647</p>
+            </div>
 
-      <div class="col d-flex flex-column align-items-center">
-        <h2 class="fw-bold titulo-footer">Email</h2>
-        <p class="fs-5 text-footer">lotosblancosreiki@gmail.com</p>
-      </div>
+            <div class="col d-flex flex-column align-items-center">
+                <h2 class="fw-bold titulo-footer">Email</h2>
+                <p class="fs-5 text-footer">lotosblancosreiki@gmail.com</p>
+            </div>
 
-      <div class="col d-flex flex-column align-items-center">
-        <h2 class="fw-bold titulo-footer">Direccion</h2>
-        <p class="fs-5 text-footer">
-          Calle 142, Número 1032 <br> Entre 10 y 11, Berazategui
-        </p>
-      </div>
+            <div class="col d-flex flex-column align-items-center">
+                <h2 class="fw-bold titulo-footer">Direccion</h2>
+                <p class="fs-5 text-footer">
+                    Calle 142, Número 1032 <br> Entre 10 y 11, Berazategui
+                </p>
+            </div>
 
-      <div class="col d-flex justify-content-center">
-        <img src="{{ url_for('static', path='logo.svg') }}" width="200">
+            <div class="col d-flex justify-content-center">
+                <img src="{{ url_for('static', path='logo.svg') }}" width="200">
+            </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
+</body>
 </body>
 </html>
+
+       
+
 
        
