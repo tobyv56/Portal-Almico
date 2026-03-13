@@ -1,0 +1,109 @@
+html, body{
+    height:100%;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/*barra de navegacion*/
+
+.navbar{
+    background-color: #A68B6D;
+    align-items: right;
+    justify-content: right;
+    display: flex;
+}
+
+.navbar-collapse{
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo{
+    width: 100px;
+}
+
+.nav-link{
+    font-size: 3rem !important;
+    font-weight: 500;
+}
+
+.imagen-section {
+    background: linear-gradient(
+        to right, 
+        rgba(255, 255, 255, 1) 0%,   /* Blanco sólido al inicio */
+        rgba(255, 255, 255, 1) 15%,  /* Se mantiene sólido solo hasta el 15% */
+        rgba(255, 255, 255, 0) 45%   /* A la mitad ya es totalmente invisible */
+    ), 
+    url('../imagenes/section1.png');
+    
+    background-size: cover;
+    background-position: right center; /* Empuja la foto a la derecha */
+    background-repeat: no-repeat;
+    height: 800px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.imagen-section h1{
+    text-align: left;
+}
+
+.btn{
+    color: #6F42C1 !important;
+    border-color: #6F42C1 !important;
+}
+
+.btn :hover{
+    background-color: #6F42C1 !important;
+    color: white !important;
+    border-color: #6F42C1 !important;
+}
+
+.text-principal{
+    font-size: 4rem !important;
+}
+
+.leyend-principal{
+    font-size: 2rem !important;
+}
+
+.link {
+    text-decoration: none !important;
+    color: inherit !important; /* Esto hace que el texto sea blanco como el borde del botón */
+    display: block; 
+    width: 100%;
+    height: 100%;
+}
+
+
+/*section hero(actividades)*/
+
+.secciones{
+    background-color: #EBDED1 !important;
+    padding: 2px;
+}
+
+.img-act{
+    object-fit: cover;
+    width: 20px
+}
+
+.actividad{
+    font-size: 4rem !important;
+    margin: 15px;
+}
+
+.desc-actividad{
+    font-size: 2rem !important;
+}
+
+.titulos{
+    font-size: 5rem !important;
+    padding: 10px !important;
+    margin: 10px !important;
+}

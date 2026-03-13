@@ -1,0 +1,103 @@
+li {
+    margin-bottom: 10px;
+    font-size: 2rem; 
+}
+
+h1,h2{
+    font-family: 'Lato', sans-serif;
+}
+
+/*barra de navegacion*/
+
+.navbar{
+    background-color: #A68B6D;
+    align-items: right;
+    justify-content: right;
+    display: flex;
+}
+
+.navbar-collapse{
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo{
+    width: 100px;
+}
+
+.nav-link{
+    font-size: 3rem !important;
+    font-weight: 500;
+}
+
+/*section hero(presentaciones)*/
+
+.img-presentacion{
+  display: flex;          
+  align-items: flex-start; 
+  gap: 30px;            
+  max-width: 1000px;      
+  margin: 0 auto;
+}
+
+.presentacion-leyenda{
+    font-size: 2rem;
+    gap: 30px;
+    font-size: 2rem;
+    font-family: 'Lato', sans-serif;
+}
+
+.secciones{
+    background-color: #EBDED1 !important;
+    padding: 2px;
+}
+
+.lista-estrellas {
+  list-style-type: "⭐"; 
+  padding-left: 1.5rem;   
+  font-family: 'Playfair Display', serif;
+}
+
+.lista-hojas{
+  list-style-type: "🍃"; 
+  padding-left: 1.5rem;  
+  font-family: 'Playfair Display', serif; 
+}
+
+.lista-lunas{
+  list-style-type: "🌙"; 
+  padding-left: 1.5rem;  
+  font-family: 'Playfair Display', serif;
+}
+
+.lista-estrellas, .lista-hojas, .lista-lunas {
+    list-style-position: inside; /* Mantiene el emoji alineado con el texto centrado */
+    padding: 0;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: inline-block; /* Permite que el contenedor se ajuste al texto */
+    text-align: left;      /* Alinea el texto a la izquierda pero el bloque estará centrado */
+}
+
+/* Contenedor para centrar el bloque de la lista */
+.ul-container {
+    text-align: center;
+}
+
+/*footer*/
+
+.titulo-footer{
+    font-size: 2rem !important;
+    padding: 10px !important;
+    margin: 10px !important;
+     display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.text-footer{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
