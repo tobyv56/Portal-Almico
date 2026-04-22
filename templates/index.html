@@ -86,89 +86,52 @@
 <!--section hero(section que hacemos?)-->
 
 
-<section class="container-fluid py-overflow-hidden shadow-sm">
-  <div class="row secciones">
-    <h1 class="fw-bold titulos">
-        que hacemos?
-    </h1>
-    <div class="col">
-      <img src="{{url_for('static', path='stars.svg')}}" alt="img actividad 1" width="50" class="img-fluid d-block mx-auto mb-2 rounded-circle border border-dark border-3">
-      <h2 class="text-center mb-2 actividad">
-        Reiki Usui-karuna-Angelical
-      </h2>
-    </div>
-    <div class="col">
-      <img src="{{url_for('static', path='feather.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-2 rounded-circle border border-dark border-3">
-      <h2 class="text-center mb-2 actividad">
-        Pendulo Hebreo
-      </h2>
-    </div>
-    <div class="col">
-      <img src="{{url_for('static', path='leaf.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-2 rounded-circle border border-dark border-3">
-      <h2 class="text-center mb-2 actividad">
-        Regresiones A Vidas asadas
-      </h2>
-    </div>
-    <div class="col">
-      <img src="{{url_for('static', path='brilliance.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-1 rounded-circle border border-dark border-3">
-      <h2 class="text-center mb-2 actividad">
-        Barras de access
-      </h2>
-    </div>
-    <div class="col">
-      <img src="{{url_for('static', path='brilliance.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-1 rounded-circle border border-dark border-3">
-      <h2 class="text-center mb-2 actividad">
-        Flores de Bach
-      </h2>
-    </div>
-    <div class="col">
-      <img src="{{url_for('static', path='brilliance.svg')}}" alt="" width="50" class="img-fluid d-block mx-auto mb-1 rounded-circle border border-dark border-3">
-      <h2 class="text-center mb-2 actividad">
-        Aromaterapia
-      </h2>
-    </div>
+<section class="container-fluid py-5 shadow-sm" style="background-color: #eaddca;">
+  <div class="container">
+    <h1 class="fw-bold text-center mb-5 titulos">¿Qué hacemos?</h1>
+    <div class="row g-4 justify-content-center">
+      <div class="col-6 col-md-4 col-lg-2 text-center">
+        <div class="icon-wrapper mb-3">
+          <img src="{{url_for('static', path='stars.svg')}}" alt="Reiki" width="50" class="img-fluid rounded-circle border border-dark border-3 p-2">
+        </div>
+        <h2 class="fs-6 actividad">Reiki Usui-Karuna</h2>
+      </div>
+      
+      <div class="col-6 col-md-4 col-lg-2 text-center">
+        <img src="{{url_for('static', path='feather.svg')}}" width="50" class="img-fluid mb-3 rounded-circle border border-dark border-3 p-2">
+        <h2 class="fs-6 actividad">Péndulo Hebreo</h2>
+      </div>
+
+      <div class="col-6 col-md-4 col-lg-2 text-center">
+        <img src="{{url_for('static', path='leaf.svg')}}" width="50" class="img-fluid mb-3 rounded-circle border border-dark border-3 p-2">
+        <h2 class="fs-6 actividad">Regresiones a Vidas Pasadas</h2>
+      </div>
+      </div>
   </div>
 </section>
 
-<!--talleres-->
-<section>
-  <div class="container-fluid py-overflow-hidden shadow-sm">
-    <h2> talleres recientes:</h2>
+<section class="py-5">
+  <div class="container">
+    <h2 class="mb-4">Talleres recientes:</h2>
     <div class="row"> 
-      {% if cursos|length >= 3 %}
-      <div class="col-md-4 d-flex justify-content-center">
-        <div class="card" style="width: 18rem;">
-          <img src="/static/imagenes/{{ cursos[0].imagen }}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{cursos[0].nombrecurso}}</h5>
-              <p class="card-text">{{cursos[0].descripcion}}</p>
-              <p class="card-text">fecha: {{cursos[0].fecha}} - hora: {{cursos[0].hora}}</p>
-              <a href="#" class="btn btn-primary">Inscribirse aca</a>
+      {% if cursos and cursos|length > 0 %}
+        {% for curso in cursos %}
+          <div class="col-md-4 mb-4 d-flex justify-content-center">
+            <div class="card shadow-sm h-100" style="width: 18rem;">
+              <img src="/static/imagenes/{{ curso.imagen }}" class="card-img-top" alt="{{ curso.nombrecurso }}">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ curso.nombrecurso }}</h5>
+                <p class="card-text">{{ curso.descripcion }}</p>
+                <p class="card-text mt-auto"><small class="text-muted">Fecha: {{ curso.fecha }}</small></p>
+                <a href="#" class="btn btn-primary mt-2">Inscribirse</a>
+              </div>
             </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12 text-center">
+          <p class="lead text-muted">Próximamente anunciaremos nuevos talleres. ¡Estate atento!</p>
         </div>
-      </div>
-      <div class="col-md-4 d-flex justify-content-center">
-        <div class="card" style="width: 18rem;">
-          <img src="/static/imagenes/{{ cursos[1].imagen }}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{cursos[1].nombrecurso}}</h5>
-              <p class="card-text">{{cursos[1].descripcion}}</p>
-              <p class="card-text">fecha: {{cursos[1].fecha}} - hora: {{cursos[1].hora}}</p>
-              <a href="#" class="btn btn-primary">Inscribirse aca</a>
-            </div>
-        </div>
-      </div>
-      <div class="col-md-4 d-flex justify-content-center">
-        <div class="card" style="width: 18rem;">
-          <img src="/static/imagenes/{{ cursos[2].imagen }}" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{cursos[2].nombrecurso}}</h5>
-              <p class="card-text">{{cursos[2].descripcion}}</p>
-              <p class="card-text">fecha: {{cursos[2].fecha}} - hora: {{cursos[2].hora}}</p>
-              <a href="#" class="btn btn-primary">Inscribirse aca</a>
-            </div>
-        </div>
-      </div>
       {% endif %}
     </div>
   </div>
