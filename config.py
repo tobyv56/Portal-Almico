@@ -33,27 +33,38 @@ templates = Jinja2Templates(directory="templates")
 async def mostrar_reservas(request: Request):
     return templates.TemplateResponse("reservas.html", {"request": request})
 
+# --- 1. CONFIGURACIÓN DE DB (Borrá las líneas de conn y cursor globales) ---
+DATABASE_URL ='postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require'
+
+def get_db():
+    # Solo abrimos la conexión cuando se necesita
+    conn = psycopg2.connect(DATABASE_URL)
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    return conn, cursor
+
+# --- 2. RUTA DE INICIO (Optimizada y segura) ---
 @app.get("/", response_class=HTMLResponse) 
 async def mostrar_inicio(request: Request):
+    try:
+        conn, cursor = get_db()
+        cursor.execute("""
+            SELECT nombrecurso, fecha, hora, descripcion, imagen 
+            FROM curso
+            WHERE fecha >= CURRENT_DATE
+            ORDER BY fecha ASC
+            LIMIT 3
+        """)
+        cursos = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print(f"Error de base de datos: {e}")
+        cursos = [] # Si falla la DB, mandamos la lista vacía para que no explote el HTML
 
-    conn, cursor = get_db()
-    
-    cursor.execute("""SELECT nombrecurso,fecha,hora,descripcion,imagen FROM curso
-                      WHERE fecha >= CURRENT_DATE
-                      ORDER BY fecha ASC
-                      LIMIT 3""")
-    
-    cursos = cursor.fetchall()
-
-    cursor.close()
-    conn.close()
-
-    return templates.TemplateResponse( 
-    "index.html", {
-        "request" : request,
-        "cursos" : cursos
-    }
-    )
+    return templates.TemplateResponse("index.html", {
+        "request": request,
+        "cursos": cursos
+    })
 
 #cursos
 @app.get("/cursos") 
