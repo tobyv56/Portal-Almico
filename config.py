@@ -58,7 +58,8 @@ async def mostrar_cursos(request: Request):
     conn.close()
     
     return templates.TemplateResponse(
-        "cursos.html", 
+        request=request, 
+        name="cursos.html",
         context={
             "request": request,
             "talleres" : talleres
@@ -66,6 +67,7 @@ async def mostrar_cursos(request: Request):
     )
 
 @app.post("/cursos/creacion", response_class=HTMLResponse)
+
 async def creacion_cursos(
     nombreTaller: Annotated[str, Form()],
     fecha: Annotated[date, Form()],
@@ -81,6 +83,7 @@ async def creacion_cursos(
     ruta_archivo = os.path.join(ruta_carpeta, nombre_imagen)
     
     conn, cursor = get_db() # Usamos la función para evitar conexiones caídas
+   
     try:
         with open(ruta_archivo, "wb") as buffer:
             shutil.copyfileobj(archivo.file, buffer)
@@ -100,11 +103,16 @@ async def creacion_cursos(
 
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
-    return templates.TemplateResponse("quienes-somos.html", context={"request": request})
+    return templates.TemplateResponse(
+        request=request,
+        name="quienes-somos.html",
+        context={"request": request})
 
 @app.get("/ubicacion") 
 async def mostrar_ubicacion(request: Request):
-    return templates.TemplateResponse("ubicacion.html", context={"request": request})
+    return templates.TemplateResponse(request=request,
+                                      name="ubicacion.html", 
+                                      context={"request": request})
 
 @app.get("/health")
 def health():
@@ -118,32 +126,41 @@ def proceso_turno(
     request: Request
 ):
     if not nombre.strip():
-        return templates.TemplateResponse("reservas.html", context={
+        return templates.TemplateResponse(
+            request=request,
+            name= "reservas.html",
+            context={
             "request": request,
             "mensaje": "Nombre inválido: no puede estar vacío"
-        })
+            })
         
     if len(numTelefono) != 10:
-        return templates.TemplateResponse("reservas.html", context={
+        return templates.TemplateResponse(
+            request=request,
+            name= "reservas.html", 
+            context={
             "request": request,
             "mensaje": "numero de telefono invalido"
         })
 
     if "@gmail.com" not in email and "@hotmail.com" not in email:
-        return templates.TemplateResponse("reservas.html", context={
+        return templates.TemplateResponse(
+            request=request,
+            name= "reservas.html", 
+            context={
             "request": request,
             "mensaje": "email invalido"
         })
     
-    return templates.TemplateResponse("reservas.html", context={
+    return templates.TemplateResponse(
+        request=request,
+        name= "reservas.html",
+        context={
         "request": request,
         "mensaje": f"¡Genial {nombre}! Turno registrado."
     })
 
     
-    
-
-
 
     
 
