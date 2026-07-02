@@ -39,7 +39,7 @@ async def mostrar_inicio(request: Request):
     conn.close()
 
     return templates.TemplateResponse( 
-        "index.html", 
+        name="index.html",  
         context={
             "request" : request,
             "cursos" : cursos
