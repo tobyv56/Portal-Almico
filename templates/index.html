@@ -13,9 +13,8 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
-    <link rel="stylesheet" href="{{ url_for('static', path='index.css') }}">
-
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='logo.svg') }}">
+    <link rel="stylesheet" href="/static/index.css">
+    <link rel="icon" type="image/x-icon" href="/static/logo.svg">
 
     <title>Portal Álmico</title>
 </head>
@@ -23,20 +22,20 @@
 
     <nav class="navbar navbar-expand-md shadow-sm sticky-top bg-white">
         <div class="container">
-            <a class="navbar-brand" href="#">
-                <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal Álmico" width="50" class="logo">
+            <a class="navbar-brand" href="/">
+                <img src="/static/logo.svg" alt="Portal Álmico" width="50" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse fs-5" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('mostrar_presentacion')}}">¿Quiénes somos?</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('mostrar_ubicacion')}}">Ubicación</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ url_for('mostrar_cursos')}}">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/presentacion">¿Quiénes somos?</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ubicacion">Ubicación</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/cursos">Cursos</a></li>
                     <li class="nav-item ms-md-3">
-                        <a class="btn btn-outline-brown rounded-pill px-4" href="{{ url_for('mostrar_reservas')}}">Reserva Turnos</a>
-                    </li>
+                        <a class="btn btn-outline-brown rounded-pill px-4" href="/reservas">Reserva Turnos</a>
+                    </td>
                 </ul>
             </div>
         </div>
@@ -48,13 +47,13 @@
                 <h1 class="display-4 fw-bold mb-2 text-principal">Portal Álmico</h1>
                 <p class="lead mb-4 leyend-principal text-muted">Terapias vibracionales para la sanación del alma</p>
                 <div class="d-grid d-md-flex">
-                    <a href="{{ url_for('mostrar_reservas') }}" class="btn btn-principal btn-lg rounded-pill px-4 shadow-sm">
+                    <a href="/reservas" class="btn btn-principal btn-lg rounded-pill px-4 shadow-sm">
                         PEDIR TURNO
                     </a>
                 </div>
             </div>
             <div class="col-md-7">
-                <img src="{{url_for('static', path='sensaciondelalma1.jpg')}}" class="img-fluid w-100 h-100 hero-img" style="object-fit: cover; min-height: 400px;" alt="Sanación del alma">
+                <img src="/static/sensaciondelalma1.jpg" class="img-fluid w-100 h-100 hero-img" style="object-fit: cover; min-height: 400px;" alt="Sanación del alma">
             </div>
         </div>
     </section>
@@ -102,7 +101,7 @@
                     <p class="fs-6">Calle 142, Nº 1032<br>Berazategui</p>
                 </div>
                 <div class="col-12 col-md-3">
-                    <img src="{{ url_for('static', path='logo.svg') }}" width="120" alt="Logo Portal Álmico">
+                    <img src="/static/logo.svg" width="120" alt="Logo Portal Álmico">
                 </div>
             </div>
         </div>
@@ -119,10 +118,10 @@
                 console.warn("Health check error");
             }
         }
-        
-        // Ejecutar health check cada 10 minutos
         setInterval(checkHealth, 600000);
     </script>
+</body>
+</html>
 </body>
 </html>
 
