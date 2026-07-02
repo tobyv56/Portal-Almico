@@ -38,7 +38,7 @@ async def mostrar_inicio(request: Request):
     cursor.close()
     conn.close()
 
-   return templates.TemplateResponse(
+    return templates.TemplateResponse(
         request=request,
         name="index.html",
         context={"cursos": cursos}
@@ -140,6 +140,7 @@ def proceso_turno(
         "mensaje": f"¡Genial {nombre}! Turno registrado."
     })
 
+    
     
 
 
