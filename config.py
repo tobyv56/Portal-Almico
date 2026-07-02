@@ -38,12 +38,10 @@ async def mostrar_inicio(request: Request):
     cursor.close()
     conn.close()
 
-    return templates.TemplateResponse( 
-        name="index.html",  
-        context={
-            "request" : request,
-            "cursos" : cursos
-        }
+   return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"cursos": cursos}
     )
 
 @app.get("/cursos", response_class=HTMLResponse) 
