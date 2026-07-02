@@ -1,85 +1,80 @@
-from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse
-from typing import Annotated
+from fastapi import FastAPI, Form, Request, UploadFile, File
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
+from typing import Annotated
 import psycopg2
 from psycopg2.extras import RealDictCursor
 import os
-import unicodedata
-from datetime import date, time
-from fastapi.responses import RedirectResponse
-from fastapi import UploadFile, File
-import shutil
 import uuid
+import shutil
+from datetime import date, time
 
-#bdd
-
-DATABASE_URL ='postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
-conn = psycopg2.connect(DATABASE_URL)
-cursor = conn.cursor(cursor_factory=RealDictCursor)
+DATABASE_URL = 'postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 
 def get_db():
     conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     return conn, cursor
 
-#conexion pagina
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/reservas") 
 async def mostrar_reservas(request: Request):
-    return templates.TemplateResponse("reservas.html", {"request": request})
+    return templates.TemplateResponse("reservas.html", context={"request": request})
 
-# --- 1. CONFIGURACIÓN DE DB (Borrá las líneas de conn y cursor globales) ---
-DATABASE_URL ='postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require'
-
-def get_db():
-    # Solo abrimos la conexión cuando se necesita
-    conn = psycopg2.connect(DATABASE_URL)
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    return conn, cursor
-
-# --- 2. RUTA DE INICIO (Optimizada y segura) ---
 @app.get("/", response_class=HTMLResponse) 
 async def mostrar_inicio(request: Request):
-    try:
-        conn, cursor = get_db()
-        cursor.execute("""
-            SELECT nombrecurso, fecha, hora, descripcion, imagen 
-            FROM curso
-            WHERE fecha >= CURRENT_DATE
-            ORDER BY fecha ASC
-            LIMIT 3
-        """)
-        cursos = cursor.fetchall()
-        cursor.close()
-        conn.close()
-    except Exception as e:
-        print(f"Error de base de datos: {e}")
-        cursos = [] # Si falla la DB, mandamos la lista vacía para que no explote el HTML
-
-    return templates.TemplateResponse("index.html", {
-        "request": request,
-        "cursos": cursos
-    })
-
-#cursos
-@app.get("/cursos") 
-async def mostrar_cursos(request: Request):
-    return templates.TemplateResponse("cursos.html", {"request": request})
-
-@app.post("/cursos/creacion", response_class=HTMLResponse)
-async def creacion_cursos(nombreTaller: Annotated[str, Form()],
-                          fecha: Annotated[date, Form()],
-                          hora: Annotated[time, Form()],
-                          descripcion: Annotated[str, Form()],
-                          archivo: UploadFile = File(...)):
-
     conn, cursor = get_db()
     
+    cursor.execute("""SELECT nombrecurso,fecha,hora,imagen FROM curso
+                      WHERE fecha >= CURRENT_DATE
+                      ORDER BY fecha ASC
+                      LIMIT 3""")
+    
+    cursos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return templates.TemplateResponse( 
+        "index.html", 
+        context={
+            "request" : request,
+            "cursos" : cursos
+        }
+    )
+
+@app.get("/cursos", response_class=HTMLResponse) 
+async def mostrar_cursos(request: Request):
+    conn, cursor = get_db()
+    
+    cursor.execute("""SELECT nombrecurso,fecha,hora,descripcion,imagen FROM curso
+                      WHERE fecha >= CURRENT_DATE
+                      ORDER BY fecha ASC
+                      LIMIT 6""")
+    
+    talleres = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    
+    return templates.TemplateResponse(
+        "cursos.html", 
+        context={
+            "request": request,
+            "talleres" : talleres
+        }
+    )
+
+@app.post("/cursos/creacion", response_class=HTMLResponse)
+async def creacion_cursos(
+    nombreTaller: Annotated[str, Form()],
+    fecha: Annotated[date, Form()],
+    hora: Annotated[time, Form()],
+    descripcion: Annotated[str, Form()],
+    archivo: UploadFile = File(...)
+):
     ruta_carpeta = os.path.join("static", "imagenes")
     os.makedirs(ruta_carpeta, exist_ok=True)
     
@@ -87,6 +82,7 @@ async def creacion_cursos(nombreTaller: Annotated[str, Form()],
     nombre_imagen = f"{uuid.uuid4()}_{archivo.filename}"
     ruta_archivo = os.path.join(ruta_carpeta, nombre_imagen)
     
+    conn, cursor = get_db() # Usamos la función para evitar conexiones caídas
     try:
         with open(ruta_archivo, "wb") as buffer:
             shutil.copyfileobj(archivo.file, buffer)
@@ -98,51 +94,53 @@ async def creacion_cursos(nombreTaller: Annotated[str, Form()],
     except Exception as e:
         print(f"Error: {e}")
         conn.rollback()
+    finally:
+        cursor.close()
+        conn.close()
 
     return RedirectResponse(url="/cursos", status_code=303)
 
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
-    return templates.TemplateResponse("quienes-somos.html", {"request": request})
+    return templates.TemplateResponse("quienes-somos.html", context={"request": request})
 
 @app.get("/ubicacion") 
 async def mostrar_ubicacion(request: Request):
-    return templates.TemplateResponse("ubicacion.html", {"request": request})
+    return templates.TemplateResponse("ubicacion.html", context={"request": request})
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
 @app.post("/registro", response_class=HTMLResponse)
-def proceso_turno(nombre: Annotated[str, Form()], 
+def proceso_turno(
+    nombre: Annotated[str, Form()], 
     numTelefono: Annotated[str, Form()], 
     email: Annotated[str, Form()],
     request: Request
 ):
     if not nombre.strip():
-        return templates.TemplateResponse("reservas.html", {
+        return templates.TemplateResponse("reservas.html", context={
             "request": request,
             "mensaje": "Nombre inválido: no puede estar vacío"
         })
         
     if len(numTelefono) != 10:
-        return templates.TemplateResponse("reservas.html", {
+        return templates.TemplateResponse("reservas.html", context={
             "request": request,
             "mensaje": "numero de telefono invalido"
         })
 
     if "@gmail.com" not in email and "@hotmail.com" not in email:
-        return templates.TemplateResponse("reservas.html", {
+        return templates.TemplateResponse("reservas.html", context={
             "request": request,
             "mensaje": "email invalido"
         })
     
-    return templates.TemplateResponse("reservas.html", {
+    return templates.TemplateResponse("reservas.html", context={
         "request": request,
         "mensaje": f"¡Genial {nombre}! Turno registrado."
     })
-
-
 
     
 
