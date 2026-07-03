@@ -1,3 +1,4 @@
+
 /* --- Configuración Global --- */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
 
@@ -21,13 +22,13 @@ body {
 }
 
 /* --- Barra de Navegación --- */
-.navbar {
-    background-color: #A68B6D !important;
+.navbar{
+    background-color: #b4936d !important;
     padding: 1rem 0;
 }
 
 .nav-link {
-    font-size: 1.2rem !important; /* Bajamos de 3rem a algo legible */
+    font-size: 1.2rem !important; 
     font-weight: 500;
     color: white !important;
     transition: 0.3s;
@@ -43,15 +44,18 @@ body {
     transition: transform 0.3s;
 }
 
-.logo:hover {
-    transform: rotate(5deg);
-}
-
 /* --- Sección Hero (Principal) --- */
 .text-principal {
     font-size: 3.5rem !important;
-    color: #8d775f;
+    color: #8d775f ;
     line-height: 1.1;
+}
+
+.hero-img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
 }
 
 .leyend-principal {
@@ -59,24 +63,18 @@ body {
     color: #6c757d;
 }
 
-/* Botón personalizado - Combinando tu púrpura con el estilo Zen */
 .btn-principal {
-    background-color: #6F42C1; /* Tu color original */
+    background: #b4936d !important;
     color: white !important;
-    border: none;
-    padding: 12px 30px;
-    font-weight: bold;
-    transition: all 0.3s ease;
 }
 
 .btn-principal:hover {
-    background-color: #5a32a3;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(111, 66, 193, 0.3);
+    background: #b4936d !important;
     color: white !important;
 }
 
-/* Botón para el Navbar */
+/*
+Botón para el Navbar 
 .btn-outline-brown {
     border: 2px solid white;
     color: white;
@@ -87,38 +85,7 @@ body {
     background-color: white;
     color: #A68B6D;
 }
-
-/* --- Sección Servicios (¿Qué hacemos?) --- */
-.section-servicios {
-    background-color: #EBDED1 !important;
-}
-
-.titulos {
-    font-size: 3rem !important;
-    color: #4a3f35;
-}
-
-.img-service {
-    width: 70px;
-    height: 70px;
-    padding: 15px;
-    border: 3px solid #4a3f35;
-    border-radius: 50%;
-    background-color: white;
-    transition: all 0.3s ease;
-}
-
-.service-item:hover .img-service {
-    transform: scale(1.1) rotate(10deg);
-    border-color: #6F42C1;
-}
-
-.actividad {
-    font-size: 1.1rem !important;
-    margin-top: 10px;
-    color: #4a3f35;
-}
-
+*/
 /* --- Talleres y Cards --- */
 .card {
     transition: transform 0.3s;
@@ -131,10 +98,9 @@ body {
 }
 
 /* --- Footer --- */
-.footer-custom {
-    background-color: #eaddca;
-    border-top: 1px solid #d4c4b0;
-    padding: 3rem 0;
+footer{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
 }
 
 /* --- RESPONSIVIDAD (Media Queries) --- */
@@ -145,11 +111,7 @@ body {
         font-size: 2.5rem !important;
         text-align: center;
     }
-
-    .leyend-principal {
-        font-size: 1.2rem !important;
-        text-align: center;
-    }
+    
 
     .titulos {
         font-size: 2.2rem !important;
@@ -161,11 +123,8 @@ body {
         padding: 10px 0;
     }
 
-    .hero-img {
-        min-height: 300px !important;
-    }
-}
 
+}
 /* Tablets en adelante */
 @media (min-width: 992px) {
     .hero-img {
