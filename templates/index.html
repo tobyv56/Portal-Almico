@@ -20,20 +20,20 @@
 </head>
 <body>
 
-   <nav class="navbar navbar-expand-lg bg-body-tertiary py-4">
+  <nav class="navbar navbar-expand-md bg-body-tertiary py-4 shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="/static/logo.svg" alt="Portal Álmico" width="60" height=auto;>
+                <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal-Almico" width="50" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbar-toggler">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item fs-2"><a class="nav-link" href="/presentacion">¿Quiénes somos?</a></li>
-                    <li class="nav-item fs-2"><a class="nav-link" href="/ubicacion">Ubicación</a></li>
-                    <li class="nav-item fs-2"><a class="nav-link" href="/cursos">Cursos</a></li>
-                    <li class="nav-item fs-2"><a class="nav-link" href="/reservas">Reserva Turnos</a></li>
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/presentacion">¿Quiénes somos?</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/ubicacion">Ubicación</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/cursos">Talleres</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/reservas">Reserva Turnos</a></li>
                 </ul>
             </div>
         </div>
