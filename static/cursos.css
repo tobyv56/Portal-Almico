@@ -1,190 +1,43 @@
-/*pagina general*/
-
-html, body{
-    height:100%;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
+html, body {
+    height: 100%;
 }
 
-footer{
-    margin-top:auto;
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fdfaf5; /* Blanco cálido */
+    color: #4a3f35;
 }
 
-/*barra de navegacion*/
-
+/* --- Barra de Navegación --- */
 .navbar{
-    background-color: #A68B6D;
-    align-items: right;
-    justify-content: right;
-    display: flex;
+    background-color: #b4936d !important;
+    padding: 1rem 0;
 }
 
-.navbar-collapse{
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo{
-    width: 100px;
-}
-
-.nav-link{
-    font-size: 3rem !important;
+.nav-link {
+    font-size: 1.2rem !important; 
     font-weight: 500;
+    color: white !important;
+    transition: 0.3s;
 }
 
-/*ubicacion*/
-
-.info-box-manual {
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    background: white;
-    width: 480px;    
-    padding: 50px;   
-    border-radius: 20px;
-    box-shadow: 0 15px 45px rgba(0,0,0,0.4);
-    z-index: 10;
-    border-left: 12px solid #A68B6D;
+.nav-link:hover {
+    color: #fdfaf5 !important;
+    opacity: 0.8;
 }
 
-.info-box-manual h4 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-.btn{
-    font-size: 2rem !important; /* Texto bien grande */
-    padding: 20px !important;    /* Mucho más alto y ancho */
-    font-weight: 800 !important;  /* Letra bien gruesa */
-    text-transform: uppercase;    /* Todo en mayúsculas */
-    border-radius: 15px !important;
-    letter-spacing: 2px;          /* Espaciado entre letras */
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    background-color: bisque;
-    color: #A68B6D !important;
-}
-
-.btn:hover {
-    transform: scale(1.03);       /* Efecto de agrandado al pasar el mouse */
-    background-color: #000;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-}
-
-.info-box-manual p {
-    font-size: 2rem;
-}
-
-/*reservas*/
-
-.col-reservas{
-    margin: 20px;
-    font-size: 4rem;
-}
-
-/* 1. Centrar el calendario dentro de tu contenedor blanco */
-.calendario-wrapper {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-bottom: 50px; /* Espacio para que no choque con los botones */
-}
-
-/* 2. Definir el ancho total del calendario (ajusta el 650px a tu gusto) */
-.flatpickr-calendar.inline {
-    width: 650px !important; 
-    background: #fff !important;
-    box-shadow: none !important;
-}
-
-/* 3. Estirar la grilla de días al ancho total */
-.flatpickr-innerContainer, 
-.flatpickr-days, 
-.dayContainer {
-    width: 650px !important;
-    min-width: 650px !important;
-    max-width: 650px !important;
-}
-
-/* 4. Hacer los días grandes y cuadrados */
-.flatpickr-day {
-    max-width: none !important;
-    flex-basis: 14.28% !important; /* 7 días por fila */
-    height: 85px !important;       /* Mucho más alto */
-    line-height: 85px !important;  /* Centra el número verticalmente */
-    font-size: 1.6rem !important;  /* Números grandes */
-    margin: 2px 0 !important;
-}
-
-/* 5. Cabecera: Mes y Año gigantes */
-.flatpickr-current-month {
-    font-size: 2.2rem !important;
-    display: flex !important;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; /* Separa el mes del año para que no se pisen */
-    width: 100% !important;
-    left: 0 !important;
-    padding: 20px 0 !important;
-}
-
-/* 6. Agrandar los nombres de los días (Lu, Ma, Mi...) */
-.flatpickr-weekday {
-    font-size: 1.3rem !important;
-    font-weight: bold !important;
-    color: #A68B6D !important;
-}
-
-.col-horarios {
-    margin-top: 60px;
-}   
-
-.opciones{
-    font-size: 3rem !important;
-    border: none !important;
-    margin-top: 50px !important;
-    transform-origin: center;
-}
-
-.btn-enviar{
-    padding: 20px 35px !important;
-    font-size: 3rem !important;
-}
-
-/*talleres*/
-
-.card{
-/* NO fijes el width ni el height exactos aquí */
-    border: none;
-    border-radius: 20px;
-    overflow: hidden; /* Para que la imagen respete los bordes redondeados */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #fff;
-    height: 100%; /* Para que todas midan lo mismo en la fila */
-}
-
-.card-body {
-    display: flex;
-    flex-direction: column; /* Apila el contenido verticalmente */
-    align-items: center;    /* Centra horizontalmente el texto y botones */
-    justify-content: center;
-    padding: 2rem;
-}
-
-.card-title {
-    font-size: 1.5rem; /* Un tamaño grande pero legible */
-    color: #A68B6D;    /* El color de tu Portal Álmico */
-    font-weight: bold;
-}
-
-.card-text {
-    font-size: 1rem;
-    color: #6c757d;
+.logo {
+    width: 60px; /* Ajustado para que no rompa el nav */
+    transition: transform 0.3s;
 }
 
 /*footer*/
@@ -198,15 +51,57 @@ footer{
     justify-content: center !important;
 }
 
+footer{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
+}
+
 .text-footer{
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
 }
 
-/*talleres proximos*/
+/*talleres*/
 
-.btn-card{
-    font-size: 0.8rem !important;
-    padding: 4px 10px !important;
+.card{
+    border: none;
+    border-radius: 20px;
+    overflow: hidden; 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    height: 100%; 
 }
+
+.card-body {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;   
+    justify-content: center;
+    padding: 2rem;
+    text-align: center !important;
+}
+
+.card-title {
+    font-size: 1.5rem; 
+    color: #A68B6D;    
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+.card-img-top {
+     width: 100%;
+    height: 250px;
+    object-fit: cover;
+    object-position: top;
+}
+
+.card-body a {
+    margin-top: auto;
+}
+
+
