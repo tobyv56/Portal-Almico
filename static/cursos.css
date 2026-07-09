@@ -38,7 +38,9 @@ body {
 .logo {
     width: 60px !important; 
     transition: transform 0.3s;
+    height: auto;
 }
+
 
 /*footer*/
 
