@@ -52,13 +52,6 @@ body {
     line-height: 1.1;
 }
 
-.hero-img {
-    width: 100%;
-    height: 400px;
-    object-fit: cover;
-    display: block;
-}
-
 .leyend-principal {
     font-size: 1.5rem !important;
     color: #6c757d;
@@ -74,19 +67,17 @@ body {
     color: white !important;
 }
 
-/*
-Botón para el Navbar 
-.btn-outline-brown {
-    border: 2px solid white;
-    color: white;
-    font-weight: bold;
+.section-principal{
+    min-height: 50vh;
 }
 
-.btn-outline-brown:hover {
-    background-color: white;
-    color: #A68B6D;
+.hero-img{
+    width: 100%;
+    height: 100%;
+    min-height: 50vh !important;
+    object-fit: cover;
 }
-*/
+
 /* --- Talleres y Cards --- */
 .card {
     transition: transform 0.3s;
@@ -126,9 +117,44 @@ footer{
 
 
 }
-/* Tablets en adelante */
-@media (min-width: 992px) {
-    .hero-img {
-        height: 600px; /* Ya no hace falta 800px, 600px es más armónico */
+/* --- RESPONSIVIDAD (Media Queries) --- */
+
+@media (max-width: 768px) {
+    .text-principal {
+        font-size: 2.5rem !important;
+        text-align: center;
+    }
+    
+
+    .titulos {
+        font-size: 2.2rem !important;
+    }
+
+    .nav-link {
+        font-size: 1.5rem !important; 
+        text-align: center;
+        padding: 10px 0;
+    }
+}
+
+@media (max-width: 766px){
+
+    .section-principal{
+        min-height: auto;
+    }
+
+    .hero-img{
+        min-height: auto;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .text-principal,
+    .leyend-principal{
+        text-align: center;
+    }
+
+    .d-grid{
+        justify-content: center;
     }
 }
