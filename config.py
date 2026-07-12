@@ -23,7 +23,11 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get("/reservas") 
 async def mostrar_reservas(request: Request):
-    return templates.TemplateResponse("reservas.html", context={"request": request})
+    return templates.TemplateResponse( 
+            request=request,
+            name="reservas.html",
+            context={"request": request})
+
 
 @app.get("/", response_class=HTMLResponse) 
 async def mostrar_inicio(request: Request):
