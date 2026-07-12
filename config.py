@@ -28,7 +28,6 @@ async def mostrar_reservas(request: Request):
             name="reservas.html",
             context={"request": request})
 
-
 @app.get("/", response_class=HTMLResponse) 
 async def mostrar_inicio(request: Request):
     conn, cursor = get_db()
@@ -124,50 +123,70 @@ def health():
 
 @app.post("/registro", response_class=HTMLResponse)
 def proceso_turno(
-    nombre: Annotated[str, Form()], 
-    numTelefono: Annotated[str, Form()], 
-    email: Annotated[str, Form()],
-    request: Request
+    request: Request,
+    nombre: Annotated[str, Form()] = None,
+    numTelefono: Annotated[str, Form()] = None,
+    email: Annotated[str, Form()] = None,
 ):
+
+    if not nombre or not nombre.strip():
+        return templates.TemplateResponse(
+            request=request,
+            name="reservas.html",
+            context={
+                "request": request,
+                "mensaje": "El nombre no puede estar vacío.",
+                "tipo": "error"
+            }
+    )
+
+    # Validación del nombre
     if not nombre.strip():
         return templates.TemplateResponse(
             request=request,
-            name= "reservas.html",
+            name="reservas.html",
             context={
-            "request": request,
-            "mensaje": "Nombre inválido: no puede estar vacío"
-            })
-        
-    if len(numTelefono) != 10:
+                "request": request,
+                "mensaje": "El nombre no puede estar vacío.",
+                "tipo": "error"
+            }
+        )
+
+    # Validación del teléfono
+    if not numTelefono.isdigit() or len(numTelefono) != 10:
         return templates.TemplateResponse(
             request=request,
-            name= "reservas.html", 
+            name="reservas.html",
             context={
-            "request": request,
-            "mensaje": "numero de telefono invalido"
-        })
+                "request": request,
+                "mensaje": "El número de teléfono es inválido.",
+                "tipo": "warning"
+            }
+        )
 
+    # Validación del email
     if "@gmail.com" not in email and "@hotmail.com" not in email:
         return templates.TemplateResponse(
             request=request,
-            name= "reservas.html", 
+            name="reservas.html",
             context={
-            "request": request,
-            "mensaje": "email invalido"
-        })
-    
+                "request": request,
+                "mensaje": "El email es inválido.",
+                "tipo": "error"
+            }
+        )
+
     return templates.TemplateResponse(
         request=request,
-        name= "reservas.html",
+        name="reservas.html",
         context={
-        "request": request,
-        "mensaje": f"¡Genial {nombre}! Turno registrado."
-    })
+            "request": request,
+            "mensaje": f"¡Genial {nombre}! Tu turno fue registrado correctamente.",
+            "tipo": "success"
+        }
+    )
 
     
-
-    
-
 
 
 
