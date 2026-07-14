@@ -127,8 +127,60 @@ def proceso_turno(
     nombre: Annotated[str, Form()] = None,
     numTelefono: Annotated[str, Form()] = None,
     email: Annotated[str, Form()] = None,
+    profesor: Annotated[str, Form()] = None,
+    actividad: Annotated[str, Form()] = None,
+    fecha: Annotated[str | None, Form()] = None,
+    horario: Annotated[str | None, Form()] = None,
 ):
+    # validacion horario
+    if not horario:
+        return templates.TemplateResponse(
+            request=request,
+            name="reservas.html",
+            context={
+                "request": request,
+                "mensaje": "seleccione el horario.",
+                "tipo": "error"
+            }
+    )
+    
+    # validacion fecha
+    if not fecha:
+        return templates.TemplateResponse(
+            request=request,
+            name="reservas.html",
+            context={
+                "request": request,
+                "mensaje": "seleccione la fecha.",
+                "tipo": "error"
+            }
+    )
 
+    # validacion profesor 
+    if not profesor:
+        return templates.TemplateResponse(
+            request=request,
+            name="reservas.html",
+            context={
+                "request": request,
+                "mensaje": "seleccione el profesor/a.",
+                "tipo": "error"
+            }
+    )
+
+    # validacion actividad
+    if not actividad:
+        return templates.TemplateResponse(
+            request=request,
+            name="reservas.html",
+            context={
+                "request": request,
+                "mensaje": "seleccione la actividad.",
+                "tipo": "error"
+            }
+    )
+
+    # Validación del nombre
     if not nombre or not nombre.strip():
         return templates.TemplateResponse(
             request=request,
@@ -140,19 +192,19 @@ def proceso_turno(
             }
     )
 
-    # Validación del nombre
-    if not nombre.strip():
+    # Validación del teléfono
+    
+    if not numTelefono or not numTelefono.strip():
         return templates.TemplateResponse(
             request=request,
             name="reservas.html",
             context={
                 "request": request,
-                "mensaje": "El nombre no puede estar vacío.",
-                "tipo": "error"
+                "mensaje": "El número de teléfono no puede estar vacío.",
+                "tipo": "warning"
             }
         )
-
-    # Validación del teléfono
+    
     if not numTelefono.isdigit() or len(numTelefono) != 10:
         return templates.TemplateResponse(
             request=request,
@@ -163,8 +215,20 @@ def proceso_turno(
                 "tipo": "warning"
             }
         )
-
+    
     # Validación del email
+    
+    if not email or not email.strip():
+        return templates.TemplateResponse(
+            request=request,
+            name="reservas.html",
+            context={
+                "request": request,
+                "mensaje": "El correo no puede estar vacío.",
+                "tipo": "warning"
+            }
+        )
+    
     if "@gmail.com" not in email and "@hotmail.com" not in email:
         return templates.TemplateResponse(
             request=request,
@@ -187,12 +251,6 @@ def proceso_turno(
     )
 
     
-
-
-
-
-
-
 
 
 
