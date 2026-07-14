@@ -86,10 +86,6 @@
     color: #A68B6D !important;
 }
 
-.btn-principal{
-    font-size: 1.5rem !important;
-    padding: 22px 50px !important; 
-}
 .col-horarios {
     margin-top: 60px;
 }   
@@ -104,6 +100,13 @@
 .btn-enviar{
     padding: 20px 35px !important;
     font-size: 3rem !important;
+}
+
+.activo {
+    background-color: #b4936d !important;
+    color: white !important;
+    border: 2px solid #8d775f !important;
+    transform: scale(1.05);
 }
 
 footer{
