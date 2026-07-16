@@ -7,27 +7,28 @@ h1,h2{
     font-family: 'Lato', sans-serif;
 }
 
-/*barra de navegacion*/
-
+/* --- Barra de Navegación --- */
 .navbar{
-    background-color: #A68B6D;
-    align-items: right;
-    justify-content: right;
-    display: flex;
+    background-color: #b4936d !important;
+    padding: 1rem 0;
 }
 
-.navbar-collapse{
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo{
-    width: 100px;
-}
-
-.nav-link{
-    font-size: 3rem !important;
+.nav-link {
+    font-size: 2rem !important; 
     font-weight: 500;
+    color: white !important;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #fdfaf5 !important;
+    opacity: 0.8;
+}
+
+.logo {
+    width: 100px !important; 
+    transition: transform 0.3s;
+    height: auto;
 }
 
 /*section hero(presentaciones)*/
