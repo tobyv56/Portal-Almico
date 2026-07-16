@@ -40,7 +40,7 @@ body {
 }
 
 .logo {
-    width: 60px !important; 
+    width: 100px !important; 
     transition: transform 0.3s;
     height: auto;
 }
