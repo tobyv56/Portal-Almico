@@ -24,7 +24,7 @@ body {
 }
 
 .nav-link {
-    font-size: 1.2rem !important; 
+    font-size: 2rem !important; 
     font-weight: 500;
     color: white !important;
     transition: 0.3s;
@@ -36,11 +36,10 @@ body {
 }
 
 .logo {
-    width: 60px !important; 
+    width: 100px !important; 
     transition: transform 0.3s;
     height: auto;
 }
-
 
 /*footer*/
 
