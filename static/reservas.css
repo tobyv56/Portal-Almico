@@ -123,3 +123,44 @@ footer{
     background-color: #b4936d !important;
     padding: 1rem 0;
 }
+
+@media (max-width: 768px){
+
+    .flatpickr-calendar.inline{
+        width:100% !important;
+    }
+
+    .flatpickr-innerContainer,
+    .flatpickr-days,
+    .dayContainer{
+        width:100% !important;
+        min-width:100% !important;
+        max-width:100% !important;
+    }
+
+    .flatpickr-day{
+        height:55px !important;
+        line-height:55px !important;
+        font-size:1.1rem !important;
+    }
+
+    .flatpickr-current-month{
+        font-size:1.5rem !important;
+    }
+
+    .flatpickr-weekday{
+        font-size:1rem !important;
+    }
+
+    input {
+        width: 90%;
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+
+    option{
+        width: 90%;
+        font-size: 1.1rem;
+        padding: 20px;
+    }
+}
