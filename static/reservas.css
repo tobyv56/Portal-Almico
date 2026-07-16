@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fdfaf5; /* Blanco cálido */
+    color: #4a3f35;
+}
+
 /* --- Barra de Navegación --- */
 .navbar{
     background-color: #b4936d !important;
