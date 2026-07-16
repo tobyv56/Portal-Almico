@@ -11,7 +11,7 @@
 }
 
 .nav-link {
-    font-size: 1.2rem !important; 
+    font-size: 2rem !important; 
     font-weight: 500;
     color: white !important;
     transition: 0.3s;
@@ -23,8 +23,9 @@
 }
 
 .logo {
-    width: 60px; /* Ajustado para que no rompa el nav */
+    width: 100px !important; 
     transition: transform 0.3s;
+    height: auto;
 }
 
 /*reservas*/
