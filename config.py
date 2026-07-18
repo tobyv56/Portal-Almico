@@ -9,6 +9,7 @@ import os
 import uuid
 import shutil
 from datetime import date, time
+from apscheduler.schedulers.background import BackgroundScheduler
 
 DATABASE_URL = 'postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 
@@ -20,6 +21,28 @@ def get_db():
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+scheduler = BackgroundScheduler()
+
+def eliminar_talleres_viejos():
+    conn, cursor = get_db()
+    
+    cursor.execute("""
+                    DELETE FROM curso
+                    WHERE (fecha + hora) < NOW();
+                    """)
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+scheduler.add_job(
+    eliminar_talleres_viejos,
+    "cron",
+    hour=0,
+    minute=0)
+
+scheduler.start()
 
 @app.get("/reservas") 
 async def mostrar_reservas(request: Request):
@@ -249,9 +272,6 @@ def proceso_turno(
             "tipo": "success"
         }
     )
-
-    
-
 
 
 
