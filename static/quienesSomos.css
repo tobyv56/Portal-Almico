@@ -3,37 +3,8 @@ li {
     font-size: 2rem; 
 }
 
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Montserrat', sans-serif;
-    background-color: #fdfaf5; /* Blanco cálido */
-    color: #4a3f35;
-}
-
-/* --- Barra de Navegación --- */
-.navbar{
-    background-color: #b4936d !important;
-    padding: 1rem 0;
-}
-
-.nav-link {
-    font-size: 2rem !important; 
-    font-weight: 500;
-    color: white !important;
-    transition: 0.3s;
-}
-
-.nav-link:hover {
-    color: #fdfaf5 !important;
-    opacity: 0.8;
-}
-
-.logo {
-    width: 100px !important; 
-    transition: transform 0.3s;
-    height: auto;
+h1,h2{
+    font-family: 'Lato', sans-serif;
 }
 
 /*section hero(presentaciones)*/
@@ -90,20 +61,33 @@ body {
     text-align: center;
 }
 
-/*footer*/
-
-.titulo-footer{
-    font-size: 2rem !important;
-    padding: 10px !important;
-    margin: 10px !important;
-     display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+/* --- Barra de Navegación --- */
+.navbar{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
 }
 
-.text-footer{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.nav-link {
+    font-size: 2rem !important; 
+    font-weight: 500;
+    color: white !important;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #fdfaf5 !important;
+    opacity: 0.8;
+}
+
+.logo {
+    width: 100px !important; 
+    transition: transform 0.3s;
+    height: auto;
+}
+
+/* --- Footer --- */
+footer{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
 }
 
