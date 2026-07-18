@@ -69,7 +69,8 @@ body {
 }
 
 .section-principal{
-    min-height: 50vh;
+    min-height: 100vh !important;
+    overflow: hidden;
 }
 
 .hero-img{
