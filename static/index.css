@@ -70,7 +70,7 @@ body {
 }
 
 .section-principal{
-    min-height: 100vh !important;
+    min-height: clamp(500px, 70vh, 750px) !important;
     overflow: hidden;
 }
 
