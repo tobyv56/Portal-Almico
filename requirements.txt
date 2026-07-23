@@ -4,3 +4,5 @@ jinja2
 psycopg2
 python-multipart
 APScheduler
+cloudinary
+python-dotenv
