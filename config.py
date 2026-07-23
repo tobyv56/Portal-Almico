@@ -10,6 +10,13 @@ import uuid
 import shutil
 from datetime import date, time
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv
+import cloudinary
+import cloudinary.uploader
+
+load_dotenv()
+
+cloudinary.config(secure=True)
 
 DATABASE_URL = 'postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
 
@@ -25,22 +32,27 @@ templates = Jinja2Templates(directory="templates")
 scheduler = BackgroundScheduler()
 
 def eliminar_talleres_viejos():
+    print("Limpiando talleres...")
+
     conn, cursor = get_db()
-    
+
     cursor.execute("""
-                    DELETE FROM curso
-                    WHERE (fecha + hora) < NOW();
-                    """)
-    
+        DELETE FROM curso
+        WHERE (fecha + hora) < CURRENT_TIMESTAMP;
+    """)
+
+    print(f"Eliminados: {cursor.rowcount}")
+
     conn.commit()
+
     cursor.close()
     conn.close()
 
 scheduler.add_job(
     eliminar_talleres_viejos,
     "cron",
-    hour=0,
-    minute=0)
+    minute=0,
+    hour=0)
 
 scheduler.start()
 
@@ -93,39 +105,69 @@ async def mostrar_cursos(request: Request):
     )
 
 @app.post("/cursos/creacion", response_class=HTMLResponse)
-
-async def creacion_cursos(
-    nombreTaller: Annotated[str, Form()],
-    fecha: Annotated[date, Form()],
-    hora: Annotated[time, Form()],
+def crear_taller(
+    request: Request,
+    nombrecurso: Annotated[str, Form()],
+    fecha: Annotated[str, Form()],
+    hora: Annotated[str, Form()],
     descripcion: Annotated[str, Form()],
-    archivo: UploadFile = File(...)
+    imagen: Annotated[UploadFile, File()]
 ):
-    ruta_carpeta = os.path.join("static", "imagenes")
-    os.makedirs(ruta_carpeta, exist_ok=True)
-    
-    await archivo.seek(0)
-    nombre_imagen = f"{uuid.uuid4()}_{archivo.filename}"
-    ruta_archivo = os.path.join(ruta_carpeta, nombre_imagen)
-    
-    conn, cursor = get_db() # Usamos la función para evitar conexiones caídas
-   
+    conn, cursor = get_db()
+
     try:
-        with open(ruta_archivo, "wb") as buffer:
-            shutil.copyfileobj(archivo.file, buffer)
-            
-        query = "INSERT INTO curso (nombrecurso, fecha, hora, descripcion, imagen) VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(query, (nombreTaller, fecha, hora, descripcion, nombre_imagen))
+        resultado = cloudinary.uploader.upload(
+            imagen.file,
+            folder="portal-almico/cursos",
+            resource_type="image"
+        )
+
+        url_imagen = resultado["secure_url"]
+
+        cursor.execute(
+            """
+            INSERT INTO curso
+                (nombrecurso, fecha, hora, descripcion, imagen)
+            VALUES
+                (%s, %s, %s, %s, %s)
+            """,
+            (
+                nombrecurso,
+                fecha,
+                hora,
+                descripcion,
+                url_imagen
+            )
+        )
+
         conn.commit()
-        
-    except Exception as e:
-        print(f"Error: {e}")
+
+        return templates.TemplateResponse(
+            request=request,
+            name="crear_taller.html",
+            context={
+                "mensaje": "Taller creado correctamente",
+                "tipo": "success"
+            }
+        )
+
+    except Exception as error:
         conn.rollback()
+
+        print("Error al crear el taller:", error)
+
+        return templates.TemplateResponse(
+            request=request,
+            name="crear_taller.html",
+            context={
+                "mensaje": "No se pudo crear el taller",
+                "tipo": "error"
+            }
+        )
+
     finally:
         cursor.close()
         conn.close()
-
-    return RedirectResponse(url="/cursos", status_code=303)
 
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
@@ -273,6 +315,7 @@ def proceso_turno(
         }
     )
 
+    
 
 
 
