@@ -156,9 +156,8 @@ def eliminar_taller(
         cursor.close()
         conn.close()
 
-@app.post("/cursos/creacion", response_class=HTMLResponse)
+@app.post("/cursos/creacion")
 def crear_taller(
-    request: Request,
     nombrecurso: Annotated[str, Form()],
     fecha: Annotated[str, Form()],
     hora: Annotated[str, Form()],
@@ -202,17 +201,17 @@ def crear_taller(
     except Exception as error:
         conn.rollback()
 
-        print("Error al crear el taller:", error)
+        print("ERROR REAL AL CREAR EL TALLER:", repr(error))
 
         return RedirectResponse(
-            url="/cursos/creacion",
+            url="/cursos",
             status_code=303
         )
 
     finally:
         cursor.close()
         conn.close()
-
+        
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
     return templates.TemplateResponse(
