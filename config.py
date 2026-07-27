@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, Form, Request, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -11,15 +12,22 @@ import shutil
 from datetime import date, time
 from apscheduler.schedulers.background import BackgroundScheduler
 from dotenv import load_dotenv
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env", override=True)
+
 import cloudinary
 import cloudinary.uploader
 
-load_dotenv()
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
 
-cloudinary.config(secure=True)
-
-DATABASE_URL = 'postgresql://neondb_owner:npg_3xjveYGCoKZ2@ep-autumn-water-aduckv3c-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
-
+DATABASE_URL = os.getenv("DATABASE_URL")
 def get_db():
     conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor(cursor_factory=RealDictCursor)
@@ -104,6 +112,50 @@ async def mostrar_cursos(request: Request):
         }
     )
 
+@app.post("/cursos/eliminacion", response_class=HTMLResponse)
+def eliminar_taller(
+    nombreTaller: Annotated[str,Form()]
+):
+
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute(
+                    """
+                    DELETE FROM curso
+                    where nombreCurso = %s
+                    """,
+                    (nombreTaller,)
+                )
+
+        if cursor.rowcount == 0:
+            conn.rollback()
+
+            return RedirectResponse(
+                url="/cursos?mensaje=Taller no encontrado&tipo=warning",
+                status_code=303
+            )
+
+        conn.commit()
+
+        return RedirectResponse(
+            url="/cursos?mensaje=Taller eliminado correctamente&tipo=success",
+            status_code=303
+        )
+
+    except Exception as error:
+        conn.rollback()
+        print("Error al eliminar el taller:", error)
+
+        return RedirectResponse(
+            url="/cursos?mensaje=No se pudo eliminar el taller&tipo=error",
+            status_code=303
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
+
 @app.post("/cursos/creacion", response_class=HTMLResponse)
 def crear_taller(
     request: Request,
@@ -142,13 +194,9 @@ def crear_taller(
 
         conn.commit()
 
-        return templates.TemplateResponse(
-            request=request,
-            name="crear_taller.html",
-            context={
-                "mensaje": "Taller creado correctamente",
-                "tipo": "success"
-            }
+        return RedirectResponse(
+            url="/cursos",
+            status_code=303
         )
 
     except Exception as error:
@@ -156,13 +204,9 @@ def crear_taller(
 
         print("Error al crear el taller:", error)
 
-        return templates.TemplateResponse(
-            request=request,
-            name="crear_taller.html",
-            context={
-                "mensaje": "No se pudo crear el taller",
-                "tipo": "error"
-            }
+        return RedirectResponse(
+            url="/cursos/creacion",
+            status_code=303
         )
 
     finally:
@@ -315,6 +359,7 @@ def proceso_turno(
         }
     )
 
+    
     
 
 
