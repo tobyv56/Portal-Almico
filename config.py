@@ -20,10 +20,18 @@ load_dotenv(BASE_DIR / ".env", override=True)
 import cloudinary
 import cloudinary.uploader
 
+CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
+CLOUD_API_KEY = os.getenv("CLOUDINARY_API_KEY")
+CLOUD_API_SECRET = os.getenv("CLOUDINARY_API_SECRET")
+
+print("Cloud name cargado:", bool(CLOUD_NAME))
+print("API key cargada:", bool(CLOUD_API_KEY))
+print("API secret cargado:", bool(CLOUD_API_SECRET))
+
 cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    cloud_name=CLOUD_NAME,
+    api_key=CLOUD_API_KEY,
+    api_secret=CLOUD_API_SECRET,
     secure=True
 )
 
