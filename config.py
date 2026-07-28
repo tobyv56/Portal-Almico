@@ -1,3 +1,4 @@
+
 from fastapi import FastAPI, Form, Request, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -107,9 +108,9 @@ def mostrar_cursos(
 
     try:
         cursor.execute("""
-            SELECT nombrecurso, fecha, hora, descripcion, imagen
+            SELECT *
             FROM curso
-            ORDER BY fecha ASC, hora ASC
+            ORDER BY fecha, hora
         """)
 
         talleres = cursor.fetchall()
@@ -124,51 +125,46 @@ def mostrar_cursos(
             }
         )
 
-    except Exception as error:
-        print("ERROR EN GET /cursos:", repr(error))
-        raise
-
     finally:
         cursor.close()
         conn.close()
 
-@app.post("/cursos/eliminacion", response_class=HTMLResponse)
+@app.post("/cursos/eliminacion")
 def eliminar_taller(
-    nombreTaller: Annotated[str,Form()]
+    nombretaller: Annotated[str, Form()]
 ):
-
     conn, cursor = get_db()
 
     try:
         cursor.execute(
-                    """
-                    DELETE FROM curso
-                    where nombreCurso = %s
-                    """,
-                    (nombreTaller,)
-                )
+            """
+            DELETE FROM curso
+            WHERE nombrecurso = %s
+            """,
+            (nombretaller,)
+        )
 
         if cursor.rowcount == 0:
             conn.rollback()
 
             return RedirectResponse(
-                url="/cursos?mensaje=Taller no encontrado&tipo=warning",
+                url="/cursos?mensaje=Taller+no+encontrado&tipo=warning",
                 status_code=303
             )
 
         conn.commit()
 
         return RedirectResponse(
-            url="/cursos?mensaje=Taller eliminado correctamente&tipo=success",
+            url="/cursos?mensaje=Taller+eliminado+correctamente&tipo=success",
             status_code=303
         )
 
     except Exception as error:
         conn.rollback()
-        print("Error al eliminar el taller:", error)
+        print("Error al eliminar:", error)
 
         return RedirectResponse(
-            url="/cursos?mensaje=No se pudo eliminar el taller&tipo=error",
+            url="/cursos?mensaje=No+se+pudo+eliminar+el+taller&tipo=error",
             status_code=303
         )
 
@@ -380,7 +376,7 @@ def proceso_turno(
     )
 
     
-    
+
 
 
 
