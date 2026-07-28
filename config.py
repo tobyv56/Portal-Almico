@@ -1,5 +1,4 @@
-
-from fastapi import FastAPI, Form, Request, UploadFile, File
+rom fastapi import FastAPI, Form, Request, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -118,7 +117,6 @@ def mostrar_cursos(
         cursor.execute("""
             SELECT *
             FROM curso
-            ORDER BY fecha, hora
         """)
 
         talleres = cursor.fetchall()
@@ -184,8 +182,7 @@ def eliminar_taller(
 def crear_taller(
     request: Request,
     nombrecurso: Annotated[str, Form()],
-    fecha: Annotated[str, Form()],
-    hora: Annotated[str, Form()],
+    mes: Annotated[str, Form()],
     descripcion: Annotated[str, Form()],
     imagen: Annotated[UploadFile, File()]
 ):
@@ -203,14 +200,13 @@ def crear_taller(
         cursor.execute(
             """
             INSERT INTO curso
-                (nombrecurso, fecha, hora, descripcion, imagen)
+                (nombrecurso, mes, descripcion, imagen)
             VALUES
-                (%s, %s, %s, %s, %s)
+                (%s, %s, %s, %s)
             """,
             (
                 nombrecurso,
-                fecha,
-                hora,
+                mes,
                 descripcion,
                 url_imagen
             )
