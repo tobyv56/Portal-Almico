@@ -14,10 +14,10 @@ h1,h2{
 }
 
 .nav-link {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Poppins', sans-serif !important;
     font-size: 1.8rem;
     font-weight: 500;
-    color: #2b2b2b;
+    color: #2b2b2b !important;
     transition: 0.3s;
 }
 
@@ -86,33 +86,12 @@ h1,h2{
     text-align: center;
 }
 
-/* --- Barra de Navegación --- */
-.navbar{
-    background-color: #b4936d !important;
-    padding: 1rem 0;
-}
-
-.nav-link {
-    font-size: 2rem !important; 
-    font-weight: 500;
-    color: white !important;
-    transition: 0.3s;
-}
-
-.nav-link:hover {
-    color: #fdfaf5 !important;
-    opacity: 0.8;
-}
-
-.logo {
-    width: 100px !important; 
-    transition: transform 0.3s;
-    height: auto;
-}
 
 /* --- Footer --- */
 footer{
     background-color: #b4936d !important;
     padding: 1rem 0;
 }
+
+
 
