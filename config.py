@@ -1,4 +1,5 @@
 
+
 from fastapi import FastAPI, Form, Request, UploadFile, File
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -98,27 +99,40 @@ async def mostrar_inicio(request: Request):
         context={"cursos": cursos}
     )
 
-@app.get("/cursos", response_class=HTMLResponse) 
-async def mostrar_cursos(request: Request):
+@app.get("/cursos", response_class=HTMLResponse)
+def mostrar_cursos(
+    request: Request,
+    mensaje: str | None = None,
+    tipo: str | None = None
+):
     conn, cursor = get_db()
-    
-    cursor.execute("""SELECT nombrecurso,fecha,hora,descripcion,imagen FROM curso
-                      WHERE fecha >= CURRENT_DATE
-                      ORDER BY fecha ASC
-                      LIMIT 6""")
-    
-    talleres = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    
-    return templates.TemplateResponse(
-        request=request, 
-        name="cursos.html",
-        context={
-            "request": request,
-            "talleres" : talleres
-        }
-    )
+
+    try:
+        cursor.execute("""
+            SELECT nombrecurso, fecha, hora, descripcion, imagen
+            FROM curso
+            ORDER BY fecha ASC, hora ASC
+        """)
+
+        talleres = cursor.fetchall()
+
+        return templates.TemplateResponse(
+            request=request,
+            name="cursos.html",
+            context={
+                "talleres": talleres,
+                "mensaje": mensaje,
+                "tipo": tipo
+            }
+        )
+
+    except Exception as error:
+        print("ERROR EN GET /cursos:", repr(error))
+        raise
+
+    finally:
+        cursor.close()
+        conn.close()
 
 @app.post("/cursos/eliminacion", response_class=HTMLResponse)
 def eliminar_taller(
@@ -164,8 +178,9 @@ def eliminar_taller(
         cursor.close()
         conn.close()
 
-@app.post("/cursos/creacion")
+@app.post("/cursos/creacion", response_class=HTMLResponse)
 def crear_taller(
+    request: Request,
     nombrecurso: Annotated[str, Form()],
     fecha: Annotated[str, Form()],
     hora: Annotated[str, Form()],
@@ -209,17 +224,17 @@ def crear_taller(
     except Exception as error:
         conn.rollback()
 
-        print("ERROR REAL AL CREAR EL TALLER:", repr(error))
+        print("Error al crear el taller:", error)
 
         return RedirectResponse(
-            url="/cursos",
+            url="/cursos/creacion",
             status_code=303
         )
 
     finally:
         cursor.close()
         conn.close()
-        
+
 @app.get("/presentacion") 
 async def mostrar_presentacion(request: Request):
     return templates.TemplateResponse(
