@@ -80,23 +80,31 @@ async def mostrar_reservas(request: Request):
             context={"request": request})
 
 @app.get("/", response_class=HTMLResponse) 
-async def mostrar_inicio(request: Request):
+def mostrar_inicio(
+    request: Request,
+    mensaje: str | None = None,
+    tipo: str | None = None
+):
     conn, cursor = get_db()
-    
-    cursor.execute("""SELECT nombrecurso,fecha,hora,imagen FROM curso
-                      WHERE fecha >= CURRENT_DATE
-                      ORDER BY fecha ASC
+
+    try:
+        cursor.execute("""SELECT nombrecurso,mes,imagen FROM curso
                       LIMIT 3""")
     
-    cursos = cursor.fetchall()
-    cursor.close()
-    conn.close()
+        talleres = cursor.fetchall()
 
-    return templates.TemplateResponse(
-        request=request,
-        name="index.html",
-        context={"cursos": cursos}
-    )
+        return templates.TemplateResponse(
+            request=request,
+            name="index.html",
+            context={
+                "talleres": talleres,
+                "mensaje": mensaje,
+                "tipo": tipo
+            }
+        )
+    finally:
+            cursor.close()
+            conn.close()
 
 @app.get("/cursos", response_class=HTMLResponse)
 def mostrar_cursos(
@@ -375,6 +383,7 @@ def proceso_turno(
         }
     )
 
+    
     
 
 
