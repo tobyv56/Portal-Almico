@@ -142,11 +142,13 @@
    
   <section class="py-5">
         <div class="container-fluid overflow-hidden secciones">
-            <div class="row align-items-center secciones">
-                <div class="col img-fluid">
-                    <img src="{{url_for('static', path='71b0a9ee-6bbc-447e-a3fd-d80a2e70906b.jpg')}}" 
-                    alt="jose-luis">
-                </div>
+            <div class="row align-items-center">
+                <div class="col-12 col-md-5">
+                <img
+                    src="{{ url_for('static', path='71b0a9ee-6bbc-447e-a3fd-d80a2e70906b.jpg') }}"
+                    alt="Cintia Galindez"
+                    class="imagenPresentacion img-fluid">
+            </div>
             <div class="col-md-7 text-start">
                 <p class="fw-bold text-center mt-4 presentacion-leyenda">
                     Hola, soy Cintia.
