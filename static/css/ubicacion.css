@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fdfaf5; /* Blanco cálido */
+    color: #4a3f35;
+}
+
+/* --- Barra de Navegación --- */
+.navbar{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
+}
+
+.nav-link {
+    font-size: 2rem !important; 
+    font-weight: 500;
+    color: white !important;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #fdfaf5 !important;
+    opacity: 0.8;
+}
+
+.logo {
+    width: 100px !important; 
+    transition: transform 0.3s;
+    height: auto;
+}
+
+.title{
+   font-family: "Dancing Script", cursive;
+}
+
+/*ubicacion*/
+
+.info-box-manual {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    background: white;
+    width: 480px;    
+    padding: 50px;   
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.4);
+    z-index: 10;
+    border-left: 12px solid #A68B6D;
+}
+
+.info-box-manual h4 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.btn{
+    font-size: 2rem !important; /* Texto bien grande */
+    padding: 20px !important;    /* Mucho más alto y ancho */
+    font-weight: 800 !important;  /* Letra bien gruesa */
+    text-transform: uppercase;    /* Todo en mayúsculas */
+    border-radius: 15px !important;
+    letter-spacing: 2px;          /* Espaciado entre letras */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    background-color: bisque;
+    color: #A68B6D !important;
+}
+
+.btn:hover {
+    transform: scale(1.03);       /* Efecto de agrandado al pasar el mouse */
+    background-color: #000;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+.info-box-manual p {
+    font-size: 2rem;
+}
+
+/* --- Footer --- */
+footer{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
+}
+
+/* --- RESPONSIVIDAD (Media Queries) --- */
+
+@media (max-width: 768px) {
+
+    .info-box-manual {
+        position: static;
+        width: 50%;
+        transform: none;
+        margin-top: 10px;
+    }
+
+    .info-box-manual h4 {
+        font-size: 1.8rem;
+    }
+
+    .info-box-manual p {
+        font-size: 1.3rem;
+    }
+
+    .info-box-manual .btn {
+        font-size: 1.3rem !important;
+        padding: 15px !important;
+    }
+
+}
