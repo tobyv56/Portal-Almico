@@ -89,16 +89,21 @@ h1,h2{
    font-family: "Dancing Script", cursive;
 }
 
+.imagenPresentacion {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 /*-- imagen presentacion (MEDIA QUERY)--*/
 
 @media (max-width: 768px) {
 
-    .imagenPresentacion{
-        width:100%;
-        height:50vh;
-        object-fit:cover;
-        object-position:center;
-        display:block;
+    .imagenPresentacion {
+        width: 100%;
+        height: 380px;
+        object-fit: cover;
+        object-position: center 25%;
     }
 
     .secciones{
@@ -112,3 +117,4 @@ footer{
     background-color: #b4936d !important;
     padding: 1rem 0;
 }
+
