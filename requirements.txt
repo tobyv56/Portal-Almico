@@ -1,8 +1,10 @@
 fastapi
 uvicorn
 jinja2
-psycopg2
+psycopg2-binary
 python-multipart
 APScheduler
 cloudinary
 python-dotenv
+pwdlib[argon2]
+itsdangerous
