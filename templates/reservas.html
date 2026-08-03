@@ -20,15 +20,22 @@
     <!--titulo-->
     <title>Portal Almico - Reservas</title>
 
-    <!--google fonts-->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <!--flatpickr-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 </head>
-<body>
+<body
+    class="d-flex flex-column min-vh-100"
+    data-mensaje="{{ mensaje or '' }}"
+    data-tipo="{{ tipo or '' }}">
 
     <!--boostrap js-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -39,7 +46,7 @@
     <!--barra navegacion-->
     <nav class="navbar navbar-expand-md bg-body-tertiary py-4 shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/inicio">
                 <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal-Alm" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,11 +63,9 @@
         </div>
     </nav>
 
+ <!--reservas-->
 
-    
-  <!--reservas-->
-
-  <h2 class="text-left m-5 col-reservas">Reserva Tu Turno Completando El Siguiente Formulario</h2>
+  <h2 class="text-left m-5 col-reservas title">Reserva Tu Turno Completando El Siguiente Formulario</h2>
 
   <div class="container-fluid">
 
@@ -129,17 +134,17 @@
 
     <div class="row">
         <div class="col-12 text-center">
-            <h1 class="text-center m-5 col-reservas">Nombre</h1>
+            <h1 class="text-center m-4 col-reservas">Nombre</h1>
             <input type="text" name="nombre">
         </div>
 
         <div class="col-12 text-center">
-            <h1 class="text-center m-5 col-reservas">Teléfono</h1>
+            <h1 class="text-center m-4 col-reservas">Teléfono</h1>
             <input type="text" name="numTelefono" placeholder="ej: 1139952345">
         </div>
 
         <div class="col-12 text-center">
-            <h1 class="text-center m-5 col-reservas">Email</h1>
+            <h1 class="text-center m-4 col-reservas">Email</h1>
             <input type="email" name="email" placeholder="ej: cintiagalindez09@gmail.com">
         </div>
     </div>
@@ -178,65 +183,12 @@
         </div>
     </footer>
     
-     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url_for('static', path='js/reservas.js') }}"></script>
 </body>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-    flatpickr("#calendario-fijo", {
-        inline: true,      // Hace que el calendario esté siempre visible
-        minDate: "today",  // Evita que reserven fechas pasadas
-        dateFormat: "Y-m-d",
-        locale: {
-            firstDayOfWeek: 1,
-            weekdays: {
-              shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-              longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],         
-            },
-            months: {
-              shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-              longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            },
-        },
-        onChange: function(selectedDates, dateStr, instance) {
-            // Esto guarda la fecha en el input oculto que ya tienes
-            document.getElementById('fecha-seleccionada').value = dateStr;
-            console.log("Fecha seleccionada: " + dateStr);
-        }
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-{% if mensaje %}
-<script>
-Swal.fire({
-    icon: "{{ tipo }}",
-    title: "{{ mensaje }}",
-    confirmButtonText: "Aceptar",
-    confirmButtonColor: "#b4936d",
-    background: "#fdfaf5",
-    color: "#4a3f35"
-});
-</script>
-{% endif %}
-
-<script>
-  document.querySelectorAll(".horario").forEach(boton => {
-
-    boton.addEventListener("click", function () {
-
-        document.querySelectorAll(".horario").forEach(b => {
-            b.classList.remove("activo");
-        });
-
-        this.classList.add("activo");
-
-        document.getElementById("horario-seleccionado").value = this.textContent.trim();
-    });
-
-  });
-</script>
-
 </html>
+
+
+
