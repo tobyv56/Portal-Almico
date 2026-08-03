@@ -153,3 +153,43 @@ footer{
         justify-content: center;
     }
 }
+
+@media (max-width: 576px) {
+
+    .card-taller {
+        width: calc(100% - 24px);
+        max-width: 380px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .imagen-taller {
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .cuerpo-taller {
+        padding: 1rem;
+    }
+
+    .titulo-taller {
+        font-size: 1.8rem;
+        line-height: 1.15;
+        margin-bottom: 1rem;
+    }
+
+    .descripcion-taller {
+        font-size: 1rem;
+        line-height: 1.45;
+        margin-bottom: 1rem;
+    }
+
+    .mes-taller {
+        font-size: 1.2rem;
+    }
+
+    .card-taller .btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
