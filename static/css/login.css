@@ -1,0 +1,34 @@
+body{
+    background-color: #b4936d !important;
+}
+
+.card_login{
+    max-width: 600px;
+}
+
+.login{
+    font-size: 1.5rem !important;
+}
+
+@media (max-width: 576px) {
+     .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    .card_login {
+        max-width: 360px;
+        padding: 1.25rem !important;
+        border-radius: 18px !important;
+    }
+
+    .card_login img {
+        width: 230px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .titulo {
+        font-size: 1.7rem;
+    }
+}
