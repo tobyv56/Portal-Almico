@@ -20,8 +20,12 @@
     <!--titulo-->
     <title>Portal Almico - Ubicacion</title>
 
-    <!--google fonts-->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 </head>
 <body>
     
@@ -29,9 +33,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!--barra navegacion-->
-    <nav class="navbar navbar-expand-md bg-body-tertiary py-4 shadow-sm">
+    <nav class="navbar navbar-expand-md bg-body-tertiary py-3 fs-2 shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/inicio">
                 <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal-Alm" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,15 +43,14 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/presentacion">¿Quiénes somos?</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/ubicacion">Ubicación</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/cursos">Talleres</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/reservas">Reserva Turnos</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/presentacion">¿Quien Soy?</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/ubicacion">Ubicación</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/cursos">Talleres</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/reservas">Reserva Turnos</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
 
 <!--ubicacion-->
 <section class="ubicacion-exacta py-5">
@@ -55,7 +58,7 @@
 
     <div class="row mb-4">
       <div class="col text-center">
-        <h1 class="titulos">¿Dónde estamos?</h1>
+        <h1 class="titulos title">¿Dónde estamos?</h1>
       </div>
     </div>
 
@@ -98,9 +101,11 @@
                 </div>
             </div>
         </div>
-    </footer>
-    
+  </footer>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </html>
 
 
