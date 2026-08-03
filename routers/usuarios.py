@@ -212,6 +212,15 @@ def iniciar_sesion(
                 status_code=303
             )
 
+        if rol_usuario == "admin":
+            return templates.TemplateResponse(
+                    request=request,
+                    name="admin.html",
+                    context={
+                        "mensaje": mensaje,
+                        "tipo": tipo
+                    }
+
         request.session["idusuario"] = usuario_encontrado["idusuario"]
         request.session["rol"] = rol_usuario
 
