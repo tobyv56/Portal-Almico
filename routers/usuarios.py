@@ -220,6 +220,7 @@ def iniciar_sesion(
                         "mensaje": mensaje,
                         "tipo": tipo
                     }
+            )
 
         request.session["idusuario"] = usuario_encontrado["idusuario"]
         request.session["rol"] = rol_usuario
