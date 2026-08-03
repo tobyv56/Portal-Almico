@@ -7,23 +7,25 @@
     <meta name="keywords" content="terapia, reiki, energia, alma, berazategui, portal almico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <link rel="stylesheet" href="/static/css/index.css">
-    <link rel="icon" type="image/x-icon" href="/static/logo.svg">
+    <link rel="icon" type="image/x-icon" href="/static/imagenes/logo.svg">
     
-
     <title>Portal Álmico</title>
 </head>
 <body>
 
-   <nav class="navbar navbar-expand-md bg-body-tertiary py-4 shadow-sm">
+   <nav class="navbar navbar-expand-md bg-body-tertiary py-3 fs-2 shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="/inicio">
                 <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal-Alm" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,16 +33,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/presentacion">¿Quiénes somos?</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/ubicacion">Ubicación</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/cursos">Talleres</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/reservas">Reserva Turnos</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/presentacion">¿Quien Soy?</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/ubicacion">Ubicación</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/cursos">Talleres</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/reservas">Reserva Turnos</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <section class="section-principal container my-4 my-md-5 p-0 rounded-5 shadow-sm bg-white">
+    <section class="section-principal container my-2 my-md-6 p-0 rounded-5 shadow-sm bg-white">
         <div class="row g-0 align-items-center flex-column-reverse flex-md-row">
             <div class="col-md-5 p-4 p-md-5 d-flex flex-column justify-content-center">
                 <h1 class="text-principal fw-bold mb-2">Portal Álmico</h1>
@@ -51,10 +53,11 @@
                     </a>
                 </div>
             </div>
-            <div class="col-md-7">
-                <img src="/static/img/sensaciondelalma1.jpg"
-                    class="hero-img img-fluid w-100 d-block"
-                     alt="Sanación del alma">
+            <div class="col-md-7 p-0">
+                <img
+                src="/static/img/sensaciondelalma1.jpg"
+                class="hero-img"
+                alt="Sanación del alma">
             </div>
         </div>
     </section>
@@ -62,7 +65,7 @@
     <section class="my-5 bg-light" style="background-color: #A88168 !important;">
         <div class="container-fluid py-5 text-white" style="min-height: 50vh;">
         
-            <h2 class="fw-bold mb-5 text-center fs-1">Talleres recientes:</h2>
+            <h2 class="title fw-bold mb-5 text-center fs-1">Talleres recientes:</h2>
         
             <div class="row g-4 justify-content-start">
                 {% if talleres and talleres|length > 0 %}
@@ -73,9 +76,9 @@
                             <img src="{{ taller.imagen }}" class="card-img-top" alt="{{ taller.nombrecurso }}">
                                 <div class="card-body d-flex flex-column text-center">
                                     <h5 class="card-title fw-bold text-principal fs-4">{{ taller.nombrecurso }}</h5>
-                                    <p class="card-text text-muted small">{{ taller.descripcion }}</p>
-                                    <p class="mt-auto fw-bold fs-3">mes: {{taller.mes}} </p>
-                                    <a href="#" class="btn btn-principal rounded-pill mt-3 mx-auto">Inscribirse ahora</a>
+                                    <p class="card-text descripcion-taller">{{ taller.descripcion }}</p>
+                                    <p class="mes-taller mt-auto fw-bold"> Mes: {{ taller.mes }}</p>
+                                    <a href="#" class="btn btn-principal rounded-pill mt-3 mx-auto"> Inscribirse ahora </a>
                                 </div>
                             </div>
                         </div>
@@ -111,6 +114,14 @@
             </div>
         </div>
     </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', path='js/index.js') }}"></script>
+    
+</body>
+</html>
+
+
     
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
