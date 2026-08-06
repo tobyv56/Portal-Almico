@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form,HTTPException
 from fastapi.responses import HTMLResponse
 from typing import Annotated
 
 from configuracion import templates
 from fastapi.responses import HTMLResponse, RedirectResponse
+from routers.reservas import RepositorioReserva
 
 from configuracion import templates
 from database import get_db
@@ -15,8 +16,8 @@ from routers.seguridad import (
 )
 
 router = APIRouter(
-    prefix="/usuarios",
-    tags=["Usuarios"]
+    prefix="/admin",
+    tags=["Administracion"]
 )
 
 class Usuario:
@@ -75,33 +76,39 @@ class RepositorioUsuario:
             """
             SELECT
                 idusuario,
-                nyap,
+                nyap AS nombre_apellido,
                 email,
                 contrasena,
-                numTelefono,
+                numTelefono AS telefono,
                 rol
             FROM usuario
             WHERE LOWER(TRIM(email)) = %s
             LIMIT 1
             """,
-            (email,)
+            (email.strip().lower(),)
         )
 
         return self.cursor.fetchone()
 
-    def buscar_rol(self,email):
+    def buscar_por_id(self, idusuario):
         self.cursor.execute(
             """
-            SELECT 
+            SELECT
+                idusuario,
+                nyap AS nombre_apellido,
+                email,
+                contrasena,
+                numTelefono AS telefono,
                 rol
             FROM usuario
-            WHERE email = %s
+            WHERE idusuario = %s
+            LIMIT 1
             """,
-            (email,)
+            (idusuario,)
         )
 
         return self.cursor.fetchone()
-    
+
     def crear_usuario(self, usuario):
         self.cursor.execute(
             """
@@ -126,7 +133,7 @@ class RepositorioUsuario:
     def eliminar_usuario(self, usuario):
         self.cursor.execute(
             """
-            DELETE FROM usuarios
+            DELETE FROM usuario
             WHERE email = %s
             """,
             (usuario.email,)
@@ -134,11 +141,66 @@ class RepositorioUsuario:
 
         return self.cursor.rowcount > 0
 
+def obtener_usuario_actual(request: Request) -> Usuario:
 
-@router.get(
-    "/registro",
-    response_class=HTMLResponse
-)
+    print("SESIÓN AL CREAR TALLER:", dict(request.session))
+
+    idusuario = request.session.get("idusuario")
+
+    print("ID LEÍDO DE LA SESIÓN:", idusuario)
+
+    if idusuario is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Debes iniciar sesión"
+        )
+
+    conn = None
+    cursor = None
+
+    try:
+        conn, cursor = get_db()
+
+        repositorio_usuario = RepositorioUsuario(cursor)
+
+        fila_usuario = repositorio_usuario.buscar_por_id(
+            idusuario
+        )
+
+        print("FILA BUSCADA POR ID:", fila_usuario)
+
+        if fila_usuario is None:
+            request.session.clear()
+
+            raise HTTPException(
+                status_code=401,
+                detail="El usuario de la sesión no existe"
+            )
+
+        rol = fila_usuario["rol"].strip().lower()
+
+        usuario_actual = Usuario(
+            nombre_apellido=fila_usuario["nombre_apellido"],
+            email=fila_usuario["email"],
+            contrasena=fila_usuario["contrasena"],
+            telefono=fila_usuario["telefono"],
+            rol=rol
+        )
+
+        print("EMAIL RECUPERADO:", usuario_actual.email)
+        print("ROL RECUPERADO:", repr(usuario_actual.rol))
+        print("PERMISOS:", usuario_actual.tiene_permisos())
+
+        return usuario_actual
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+
+        if conn is not None:
+            conn.close()
+
+@router.get("/registro",response_class=HTMLResponse)
 def mostrar_registro(
     request: Request,
     mensaje: str | None = None,
@@ -153,108 +215,162 @@ def mostrar_registro(
         }
     )
 
-@router.get("/login", response_class=HTMLResponse)
-def mostrar_login(
-    request: Request,
-    mensaje: str | None = None,
-    tipo: str | None = None
-):
+@router.get("/login",response_class=HTMLResponse)
+def mostrar_login( request: Request,
+                   mensaje: str | None = None,
+                   tipo: str | None = None):
     return templates.TemplateResponse(
-        request=request,
-        name="login.html",
-        context={
-            "mensaje": mensaje,
-            "tipo": tipo
-        }
-    )
+                        request=request,
+                        name="login.html",
+                        context={
+                            "mensaje": mensaje,
+                            "tipo": tipo
+                        }
+                )
 
 @router.post("/login")
-def iniciar_sesion(
+def iniciar_sesion_admin(
     request: Request,
     email: Annotated[str, Form()],
-    contrasena: Annotated[str, Form()],
-    mensaje: str | None = None,
-    tipo: str | None = None
+    contrasena: Annotated[str, Form()]
 ):
-    conn, cursor = get_db()
+    conn = None
+    cursor = None
 
     try:
+        conn, cursor = get_db()
+
         repositorio_usuario = RepositorioUsuario(cursor)
 
         email_normalizado = email.strip().lower()
 
-        usuario_encontrado = repositorio_usuario.buscar_por_email(
+        admin_encontrado = repositorio_usuario.buscar_por_email(
             email_normalizado
         )
 
-        if usuario_encontrado is None:
+        if admin_encontrado is None:
             return RedirectResponse(
-                url="/?mensaje=Email+o+contraseña+incorrectos&tipo=warning",
+                url=(
+                    "/admin/login"
+                    "?mensaje=Credenciales+incorrectas"
+                    "&tipo=warning"
+                ),
                 status_code=303
             )
 
         contrasena_correcta = verificar_contrasena(
             contrasena,
-            usuario_encontrado["contrasena"]
+            admin_encontrado["contrasena"]
         )
 
-        if not contrasena_correcta:
-            return RedirectResponse(
-                url="/?mensaje=Email+o+contraseña+incorrectos&tipo=warning",
-                status_code=303
-            )
+        rol = admin_encontrado["rol"].strip().lower()
 
-        rol_usuario = usuario_encontrado["rol"].strip().lower()
-
-        if rol_usuario not in ("usuario", "admin"):
+        # Solo puede entrar una cuenta administradora
+        if not contrasena_correcta or rol != "admin":
             request.session.clear()
 
             return RedirectResponse(
-                url="/?mensaje=Rol+de+usuario+invalido&tipo=error",
+                url=(
+                    "/admin/login"
+                    "?mensaje=Credenciales+incorrectas"
+                    "&tipo=warning"
+                ),
                 status_code=303
             )
 
-        if rol_usuario == "admin":
-            return templates.TemplateResponse(
-                    request=request,
-                    name="admin.html",
-                    context={
-                        "mensaje": mensaje,
-                        "tipo": tipo
-                    }
-            )
+        request.session.clear()
 
-        request.session["idusuario"] = usuario_encontrado["idusuario"]
-        request.session["rol"] = rol_usuario
+        request.session["idusuario"] = admin_encontrado["idusuario"]
+        request.session["rol"] = "admin"
 
         return RedirectResponse(
-            url="/inicio",
+            url="/admin/",
             status_code=303
         )
 
     except Exception as error:
-        print("ERROR REAL DEL LOGIN:", repr(error))
-        traceback.print_exc()
-        raise
+        print("ERROR LOGIN ADMIN:", repr(error))
+
+        return RedirectResponse(
+            url=(
+                "/admin/login"
+                "?mensaje=No+se+pudo+iniciar+sesion"
+                "&tipo=error"
+            ),
+            status_code=303
+        )
 
     finally:
-        cursor.close()
-        conn.close()
+        if cursor is not None:
+            cursor.close()
 
-@router.get("/",response_class=HTMLResponse)
-def mostrar_login(
+        if conn is not None:
+            conn.close()
+
+@router.get("/", response_class=HTMLResponse)
+def mostrar_panel_admin(
     request: Request,
     mensaje: str | None = None,
     tipo: str | None = None
 ):
-     return templates.TemplateResponse(
-            request=request,
-            name="login.html",
-            context={
-            "mensaje": mensaje,
-            "tipo": tipo
-            })
+    idusuario = request.session.get("idusuario")
+    rol = request.session.get("rol")
 
+    if idusuario is None or rol != "admin":
+        request.session.clear()
+
+        return RedirectResponse(
+            url=(
+                "/admin/login"
+                "?mensaje=Debes+iniciar+sesion+como+administrador"
+                "&tipo=warning"
+            ),
+            status_code=303
+        )
+
+    conn = None
+    cursor = None
+
+    try:
+        conn, cursor = get_db()
+
+        repositorio_reserva = RepositorioReserva(cursor)
+        reservas = repositorio_reserva.obtener_reservas()
+
+        cursor.execute(
+            """
+            SELECT email, nyap
+            FROM usuario
+            ORDER BY nyap
+            """
+        )
+
+        usuarios = cursor.fetchall()
+
+        print("RESERVAS ENCONTRADAS:", reservas)
+
+        return templates.TemplateResponse(
+            request=request,
+            name="admin.html",
+            context={
+                "reservas": reservas,
+                "usuarios": usuarios,
+                "mensaje": mensaje,
+                "tipo": tipo
+            }
+        )
+
+    except Exception as error:
+        print("ERROR AL MOSTRAR EL PANEL:", repr(error))
+        raise
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+
+        if conn is not None:
+            conn.close()
+    
 @router.get("/registroUsuario",response_class=HTMLResponse)
 def mostrar_registro( request: Request,
     mensaje: str | None = None,
@@ -267,19 +383,74 @@ def mostrar_registro( request: Request,
             "tipo": tipo
         }
     )
+@router.get("/admin", response_class=HTMLResponse)
+def mostrar_panel_admin(
+    request: Request,
+    mensaje: str | None = None,
+    tipo: str | None = None
+):
+    print("ENTRÓ AL ENDPOINT DE RESERVAS DEL ADMIN")
 
-@router.get("/admin",response_class=HTMLResponse)
-def mostrar_administracion(request: Request,
-                           mensaje: str | None = None,
-                           tipo: str | None = None):
-    return templates.TemplateResponse(
-        request=request,
-        name="admin.html",
-        context={
-            "mensaje": mensaje,
-            "tipo": tipo
-        }
-    )
+    conn = None
+    cursor = None
+
+    try:
+        conn, cursor = get_db()
+
+        repositorio_reserva = RepositorioReserva(cursor)
+        reservas = repositorio_reserva.obtener_reservas()
+
+        print("RESERVAS ENCONTRADAS:", reservas)
+
+        return templates.TemplateResponse(
+            request=request,
+            name="admin.html",
+            context={
+                "reservas": reservas,
+                "mensaje": mensaje,
+                "tipo": tipo
+            }
+        )
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+
+        if conn is not None:
+            conn.close()
+
+@router.get("/admin", response_class=HTMLResponse)
+def mostrar_administracion(
+    request: Request,
+    mensaje: str | None = None,
+    tipo: str | None = None
+):
+    conn, cursor = get_db()
+
+    try:
+        cursor.execute("""
+            SELECT email, nyap
+            FROM usuario
+            ORDER BY nyap
+        """)
+
+        usuarios = cursor.fetchall()
+
+        print("USUARIOS ENCONTRADOS:", usuarios)
+
+        return templates.TemplateResponse(
+            request=request,
+            name="admin.html",
+            context={
+                "usuarios": usuarios,
+                "mensaje": mensaje,
+                "tipo": tipo
+            }
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
 
 @router.post("/registro", response_class=HTMLResponse)
 def registro_usuario(
@@ -367,11 +538,4 @@ def registro_usuario(
         cursor.close()
         conn.close()
 
-@router.get("/administracion", response_class=HTMLResponse)
-def mostrar_administracion(request: Request):
-    return templates.TemplateResponse(
-        request=request,
-        name="administracion.html",
-        context={}
-    )
 
