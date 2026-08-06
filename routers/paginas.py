@@ -18,25 +18,11 @@ def contexto_sesion(request: Request):
         "usuario_logueado": id_usuario is not None,
         "es_admin": rol_usuario == "admin"
     }
-
-
+    
 @router.get("/", response_class=HTMLResponse)
-def mostrar_login(
-    request: Request,
-    mensaje: str | None = None,
-    tipo: str | None = None
-):
-    return templates.TemplateResponse(
-        request=request,
-        name="login.html",
-        context={
-            "mensaje": mensaje,
-            "tipo": tipo
-        }
-    )
-
-@router.get("/inicio", response_class=HTMLResponse)
-def mostrar_inicio(request: Request):
+def mostrar_inicio(request: Request,
+                   mensaje: str | None = None,
+                   tipo: str | None = None):
 
     id_usuario = request.session.get("idusuario")
 
@@ -70,16 +56,26 @@ def mostrar_inicio(request: Request):
             request=request,
             name="index.html",
             context={
-                "idusuario": id_usuario,
-                "rol_usuario": rol_usuario,
-                "es_admin": rol_usuario == "admin",
-                "talleres": talleres
+                "mensaje": mensaje,
+                "tipo": tipo,
+                "talleres": talleres,
+                "es_admin": rol_usuario == "admin"
             }
         )
-
+    
     except Exception as error:
         print("ERROR AL OBTENER TALLERES:", repr(error))
-        raise
+        return templates.TemplateResponse(
+            request=request,
+            name="index.html",
+            context={
+                "mensaje": "No se pudieron cargar los talleres",
+                "tipo": "error",
+                "talleres": [],
+                "es_admin": False
+            },
+            status_code=500
+        )
 
     finally:
         cursor.close()
@@ -106,7 +102,6 @@ def mostrar_ubicacion(request: Request):
             **contexto_sesion(request)
         }
     )
-
 
 @router.get("/health")
 def health():
