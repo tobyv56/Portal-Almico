@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Swal.fire({
         icon: tipo || "info",
         title: mensaje,
-        text: "Ya podés iniciar sesión con tu cuenta.",
+        text: "Email O Contrasena incorrectas.",
         confirmButtonText: "Aceptar",
         confirmButtonColor: "#b4936d",
         background: "#fdfaf5",
@@ -22,6 +22,5 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     });
 });
-
 
 
