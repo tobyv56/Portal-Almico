@@ -1,0 +1,58 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fdfaf5; /* Blanco cálido */
+    color: #4a3f35;
+    font-size: 1.8rem;
+}
+
+/* --- Barra de Navegación --- */
+.navbar{
+    background-color: #b4936d !important;
+    padding: 1rem 0;
+}
+
+.nav-link {
+    font-size: 2rem !important; 
+    font-weight: 500;
+    color: white !important;
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #fdfaf5 !important;
+    opacity: 0.8;
+}
+
+.logo {
+    width: 100px !important; 
+    transition: transform 0.3s;
+    height: auto;
+}
+
+.title{
+   font-family: "Dancing Script", cursive;
+}
+
+.cuadricula {
+  border-collapse: collapse;
+}
+
+.cuadricula td {
+  width: 60px;
+  height: 60px;
+  border: 1px solid black;
+  text-align: center;
+}
