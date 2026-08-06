@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Great+Vibes&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/static/css/cursos.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
 
     <link class="rounded-circle" rel="icon" type="image/x-icon" href="{{url_for('static', path='logo.svg')}}">
     
@@ -110,5 +110,27 @@
             </div>
         </div>
     </div> 
+
+    <h1>Reservas</h1>
+    <table class="cuadricula">
+        <tr>
+            <td>Nombre Y Apellido</td>
+            <td>Email</td>
+            <td>hora</td>
+            <td>fecha</td>
+            <td>seccion</td>
+        </tr>
+        {% for reserva in reservas %}
+            <tr>
+                <td>{{reserva.nyap}}</td>
+                <td>{{reserva.email}}</td>
+                <td>{{reserva.horario}}</td>
+                <td>{{reserva.fecha}}</td>
+                <td>{{reserva.seccion}}</td>
+            </tr>
+        {% endfor %}    
+    </table>
 </body>
 </html>
+
+ 
