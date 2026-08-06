@@ -16,16 +16,14 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from configuracion import templates
 from database import get_db
+from routers.usuarios import (Usuario,obtener_usuario_actual)
 
 router = APIRouter(
     tags=["Talleres"]
 )
 
-def obtener_usuario_actual() -> Usuario:
-    raise NotImplementedError
-
 @router.post("/cursos/eliminacion")
-def elimar_taller(
+def eliminar_taller(
     nombreTaller: Annotated[str, Form()],
     usuarioActual:Annotated[
         Usuario,
@@ -156,11 +154,14 @@ def crear_taller(
 ):
     conn, cursor = get_db()
 
-    if not Usuario.tiene_permisos(usuarioActual):
-            return RedirectResponse(
-                url="/cursos?mensaje=No+tenes+permisos&tipo=error",
-                status_code=303
-            )
+    print("CREAR TALLER - EMAIL:", usuarioActual.email)
+    print("CREAR TALLER - ROL:", repr(usuarioActual.rol))
+
+    if not usuarioActual.tiene_permisos():
+        return RedirectResponse(
+            url="/cursos?mensaje=No+tenes+permisos&tipo=error",
+            status_code=303
+        )
 
     try:
 
