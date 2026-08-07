@@ -34,9 +34,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <!--barra navegacion-->
-    <nav class="navbar navbar-expand-md bg-body-tertiary py-4 shadow-sm">
+    <nav class="navbar navbar-expand-md bg-body-tertiary py-3 fs-2 shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/inicio">
+            <a class="navbar-brand" href="/">
                 <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal-Alm" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,10 +44,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/admin">panel de control</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/ubicacion">Ubicación</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/cursos">Talleres</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/reservas">Reserva Turnos</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/presentacion">¿Quien Soy?</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/ubicacion">Ubicación</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/cursos">Talleres</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/reservas">Reserva Turnos</a></li>
                 </ul>
             </div>
         </div>
@@ -64,6 +64,16 @@
         <p class="text-start"> 
             <button class="btn btn-danger btn-lg rounded-pill py-3 px-5 fw-bold w-30" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEliminar">
                 Eliminar Taller
+            </button>
+        </p>
+    </div>
+
+    <div class="container-fluid mt-5">
+        <p class="text-start"> 
+            <button class="btn btn-lg btn-outline-primary rounded-pill py-3 px-5 fw-bold w-30" type="button" >
+                <a href="/admin/google/conectar">
+                    Conectar Google Calendar
+                </a>
             </button>
         </p>
     </div>
@@ -112,24 +122,49 @@
     </div> 
 
     <h1>Reservas</h1>
+    <div class="tabla-responsive">
     <table class="cuadricula">
-        <tr>
-            <td>Nombre Y Apellido</td>
-            <td>Email</td>
-            <td>hora</td>
-            <td>fecha</td>
-            <td>seccion</td>
-        </tr>
-        {% for reserva in reservas %}
+        <thead>
             <tr>
-                <td>{{reserva.nyap}}</td>
-                <td>{{reserva.email}}</td>
-                <td>{{reserva.horario}}</td>
-                <td>{{reserva.fecha}}</td>
-                <td>{{reserva.seccion}}</td>
+                <th>Nombre y apellido</th>
+                <th>Email</th>
+                <th>Hora</th>
+                <th>Fecha</th>
+                <th>Sesión</th>
             </tr>
-        {% endfor %}    
+        </thead>
+
+        <tbody>
+            {% for reserva in reservas %}
+                <tr>
+                    <td data-label="Nombre y apellido">
+                        {{ reserva.nyap }}
+                    </td>
+
+                    <td data-label="Email">
+                        {{ reserva.email }}
+                    </td>
+
+                    <td data-label="Hora">
+                        {{ reserva.horario }}
+                    </td>
+
+                    <td data-label="Fecha">
+                        {{ reserva.fecha }}
+                    </td>
+
+                    <td data-label="Sesión">
+                        {{ reserva.seccion }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No hay reservas</td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    </div>
 </body>
 </html>
 
