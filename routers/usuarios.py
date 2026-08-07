@@ -371,6 +371,7 @@ def mostrar_panel_admin(
         if conn is not None:
             conn.close()
     
+
 @router.get("/registroUsuario",response_class=HTMLResponse)
 def mostrar_registro( request: Request,
     mensaje: str | None = None,
@@ -383,41 +384,6 @@ def mostrar_registro( request: Request,
             "tipo": tipo
         }
     )
-@router.get("/admin", response_class=HTMLResponse)
-def mostrar_panel_admin(
-    request: Request,
-    mensaje: str | None = None,
-    tipo: str | None = None
-):
-    print("ENTRÓ AL ENDPOINT DE RESERVAS DEL ADMIN")
-
-    conn = None
-    cursor = None
-
-    try:
-        conn, cursor = get_db()
-
-        repositorio_reserva = RepositorioReserva(cursor)
-        reservas = repositorio_reserva.obtener_reservas()
-
-        print("RESERVAS ENCONTRADAS:", reservas)
-
-        return templates.TemplateResponse(
-            request=request,
-            name="admin.html",
-            context={
-                "reservas": reservas,
-                "mensaje": mensaje,
-                "tipo": tipo
-            }
-        )
-
-    finally:
-        if cursor is not None:
-            cursor.close()
-
-        if conn is not None:
-            conn.close()
 
 @router.get("/admin", response_class=HTMLResponse)
 def mostrar_administracion(
@@ -537,5 +503,4 @@ def registro_usuario(
     finally:
         cursor.close()
         conn.close()
-
 
