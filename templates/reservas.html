@@ -44,9 +44,9 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <!--barra navegacion-->
-    <nav class="navbar navbar-expand-md bg-body-tertiary py-4 shadow-sm">
+    <nav class="navbar navbar-expand-md bg-body-tertiary py-3 fs-2 shadow-sm">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/inicio">
+            <a class="navbar-brand" href="/">
                 <img src="{{ url_for('static', path='logo.svg') }}" alt="Portal-Alm" class="logo">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler" aria-controls="navbar-toggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,10 +54,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbar-toggler">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/presentacion">¿Quiénes somos?</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/ubicacion">Ubicación</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/cursos">Talleres</a></li>
-                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1" href="/reservas">Reserva Turnos</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/presentacion">¿Quien Soy?</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/ubicacion">Ubicación</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/cursos">Talleres</a></li>
+                    <li class="nav-item  fw-semibold"><a class="nav-link fs-1 text-white" href="/reservas">Reserva Turnos</a></li>
                 </ul>
             </div>
         </div>
@@ -69,7 +69,11 @@
 
   <div class="container-fluid">
 
-  <form class="opciones text-center m-2" action="/reservas" method="post">
+  <form
+    id="form-reserva"
+    class="opciones text-center m-2"
+    action="/reservas"
+    method="post">
 
     <div class="row justify-content-center mb-4">
         <div class="col-md-10 col-lg-6 text-center col-reservas">
@@ -117,11 +121,32 @@
                         </p>
 
                         <div class="d-flex flex-wrap justify-content-center gap-3">
-                            <button type="button" class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario">08:00</button> 
-                            <button type="button" class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario">10:00</button>
-                            <button type="button" class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario">12:00</button>
-                            <button type="button" class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario">14:00</button>
-                            <button type="button" class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario">16:00</button>
+                            <button 
+                            type="button" 
+                            class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario"
+                            data-horario="08:00">
+                            08:00
+                            </button> 
+                            <button type="button" 
+                            class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario"
+                            data-horario="10:00">
+                            10:00
+                            </button>
+                            <button type="button" 
+                            class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario"
+                            data-horario="12:00">
+                            12:00
+                            </button>
+                            <button type="button" 
+                            class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario"
+                            data-horario="14:00">
+                            14:00
+                            </button>
+                            <button type="button" 
+                            class="activo btn btn-lg btn-outline-custom py-3 px-5 fw-bold w-30 btn-principal horario"
+                            data-horario="16:00">
+                            16:00
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -129,8 +154,19 @@
         </div>
     </div>
 
-    <input type="hidden" id="fecha-seleccionada" name="fecha">
-    <input type="hidden" id="horario-seleccionado" name="horario">
+    <input
+    type="hidden"
+    id="fecha-seleccionada"
+    name="fecha"
+    value=""
+    form="form-reserva">
+
+    <input
+    type="hidden"
+    id="horario-seleccionado"
+    name="horario"
+    value=""
+    form="form-reserva">
 
     <div class="row">
         <div class="col-12 text-center">
@@ -151,7 +187,10 @@
 
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <button type="submit" class="btn btn-primary  py-3 px-5 fw-bold w-30">
+            <button
+            type="submit"
+            form="form-reserva"
+            class="btn btn-primary py-3 px-5 fw-bold w-30">
                 Confirmar Reserva
             </button>
         </div>
