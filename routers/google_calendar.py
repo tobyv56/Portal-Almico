@@ -20,19 +20,13 @@ def obtener_credenciales_google():
     refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN")
 
     if not client_id:
-        raise RuntimeError(
-            "Falta GOOGLE_CLIENT_ID"
-        )
+        raise RuntimeError("Falta GOOGLE_CLIENT_ID")
 
     if not client_secret:
-        raise RuntimeError(
-            "Falta GOOGLE_CLIENT_SECRET"
-        )
+        raise RuntimeError("Falta GOOGLE_CLIENT_SECRET")
 
     if not refresh_token:
-        raise RuntimeError(
-            "Falta GOOGLE_REFRESH_TOKEN"
-        )
+        raise RuntimeError("Falta GOOGLE_REFRESH_TOKEN")
 
     credenciales = Credentials(
         token=None,
@@ -43,7 +37,6 @@ def obtener_credenciales_google():
         scopes=SCOPES
     )
 
-    # Obtiene automáticamente un access token nuevo
     credenciales.refresh(
         GoogleRequest()
     )
@@ -66,7 +59,6 @@ def crear_evento_google(reserva):
         "America/Argentina/Buenos_Aires"
     )
 
-    # La reserva actualmente recibe strings desde Form()
     if isinstance(reserva.fecha, date):
         fecha = reserva.fecha
     else:
@@ -87,14 +79,10 @@ def crear_evento_google(reserva):
         tzinfo=zona_horaria
     )
 
-    # Por ahora suponemos sesiones de 1 hora
     fin = inicio + timedelta(hours=1)
 
     evento = {
-        "summary": (
-            f"{reserva.seccion} - "
-            f"{reserva.nyap}"
-        ),
+        "summary": f"{reserva.seccion} - {reserva.nyap}",
 
         "description": (
             f"Sesión: {reserva.seccion}\n"
@@ -106,14 +94,12 @@ def crear_evento_google(reserva):
 
         "start": {
             "dateTime": inicio.isoformat(),
-            "timeZone":
-                "America/Argentina/Buenos_Aires"
+            "timeZone": "America/Argentina/Buenos_Aires"
         },
 
         "end": {
             "dateTime": fin.isoformat(),
-            "timeZone":
-                "America/Argentina/Buenos_Aires"
+            "timeZone": "America/Argentina/Buenos_Aires"
         }
     }
 
