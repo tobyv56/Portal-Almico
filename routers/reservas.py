@@ -141,7 +141,7 @@ def realizar_reserva(
         .replace("-", "")
     )
 
-    # Estas validaciones no necesitan conexión a la base
+    # Validaciones
     if not all([
         facilitadora,
         seccion,
@@ -167,6 +167,7 @@ def realizar_reserva(
 
         repositorio_reserva = RepositorioReserva(cursor)
 
+        # Verificar horario ocupado
         if repositorio_reserva.horario_esta_ocupado(
             facilitadora,
             fecha,
@@ -181,6 +182,7 @@ def realizar_reserva(
                 status_code=303
             )
 
+        # Crear reserva
         reserva = Reserva(
             facilitadora=facilitadora,
             seccion=seccion,
@@ -192,11 +194,38 @@ def realizar_reserva(
         )
 
         repositorio_reserva.crear_reserva(reserva)
-        conn.commit()
-        crear_evento_google(reserva)
 
+        # Primero aseguramos la reserva en nuestra BD
+        conn.commit()
+
+        # Después intentamos Google Calendar
+        try:
+            evento_google = crear_evento_google(reserva)
+
+            print(
+                "EVENTO GOOGLE CREADO:",
+                evento_google["id"]
+            )
+
+        except Exception as error_google:
+            print(
+                "ERROR GOOGLE CALENDAR:",
+                repr(error_google)
+            )
+
+            return RedirectResponse(
+                url=(
+                    "/reservas"
+                    "?mensaje=El+turno+se+guardo+pero+"
+                    "no+se+pudo+agendar+en+Calendar"
+                    "&tipo=warning"
+                ),
+                status_code=303
+            )
+
+        # Si BD y Google salieron bien
         return RedirectResponse(
-            (
+            url=(
                 "/reservas"
                 "?mensaje=Turno+reservado+correctamente"
                 "&tipo=success"
@@ -214,7 +243,7 @@ def realizar_reserva(
         )
 
         return RedirectResponse(
-            (
+            url=(
                 "/reservas"
                 "?mensaje=No+se+pudo+realizar+la+reserva"
                 "&tipo=error"
@@ -228,7 +257,7 @@ def realizar_reserva(
 
         if conn is not None:
             conn.close()
-
+            
 @router.get("/reservas", response_class=HTMLResponse)
 def mostrar_reserva(
     request: Request,
