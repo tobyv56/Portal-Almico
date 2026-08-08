@@ -10,7 +10,6 @@ from routers.paginas import router as paginas_router
 from routers.talleres import router as talleres_router
 from routers.usuarios import router as usuarios_router
 from routers.reservas import router as reservas_router
-from routers.google_calendar import router as googlec_router
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -42,7 +41,7 @@ app.include_router(paginas_router)
 app.include_router(talleres_router)
 app.include_router(usuarios_router)
 app.include_router(reservas_router)
-app.include_router(googlec_router)
+
 
 
     
