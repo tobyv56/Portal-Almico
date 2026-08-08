@@ -141,7 +141,6 @@ def realizar_reserva(
         .replace("-", "")
     )
 
-    # Validaciones
     if not all([
         facilitadora,
         seccion,
@@ -152,22 +151,31 @@ def realizar_reserva(
         email
     ]):
         return RedirectResponse(
-            "/reservas?mensaje=Completa+todos+los+campos&tipo=warning",
+            (
+                "/reservas"
+                "?mensaje=Completa+todos+los+campos"
+                "&tipo=warning"
+            ),
             status_code=303
         )
 
     if not telefono_normalizado.isdigit():
         return RedirectResponse(
-            "/reservas?mensaje=El+telefono+no+es+valido&tipo=warning",
+            (
+                "/reservas"
+                "?mensaje=El+telefono+no+es+valido"
+                "&tipo=warning"
+            ),
             status_code=303
         )
 
     try:
         conn, cursor = get_db()
 
-        repositorio_reserva = RepositorioReserva(cursor)
+        repositorio_reserva = RepositorioReserva(
+            cursor
+        )
 
-        # Verificar horario ocupado
         if repositorio_reserva.horario_esta_ocupado(
             facilitadora,
             fecha,
@@ -182,7 +190,6 @@ def realizar_reserva(
                 status_code=303
             )
 
-        # Crear reserva
         reserva = Reserva(
             facilitadora=facilitadora,
             seccion=seccion,
@@ -193,14 +200,18 @@ def realizar_reserva(
             telefono=telefono_normalizado
         )
 
-        repositorio_reserva.crear_reserva(reserva)
+        # Guardamos primero en PostgreSQL
+        repositorio_reserva.crear_reserva(
+            reserva
+        )
 
-        # Primero aseguramos la reserva en nuestra BD
         conn.commit()
 
-        # Después intentamos Google Calendar
+        # Después creamos el evento en Google
         try:
-            evento_google = crear_evento_google(reserva)
+            evento_google = crear_evento_google(
+                reserva
+            )
 
             print(
                 "EVENTO GOOGLE CREADO:",
@@ -208,13 +219,14 @@ def realizar_reserva(
             )
 
         except Exception as error_google:
+
             print(
                 "ERROR GOOGLE CALENDAR:",
                 repr(error_google)
             )
 
             return RedirectResponse(
-                url=(
+                (
                     "/reservas"
                     "?mensaje=El+turno+se+guardo+pero+"
                     "no+se+pudo+agendar+en+Calendar"
@@ -223,9 +235,8 @@ def realizar_reserva(
                 status_code=303
             )
 
-        # Si BD y Google salieron bien
         return RedirectResponse(
-            url=(
+            (
                 "/reservas"
                 "?mensaje=Turno+reservado+correctamente"
                 "&tipo=success"
@@ -234,6 +245,7 @@ def realizar_reserva(
         )
 
     except Exception as error:
+
         if conn is not None:
             conn.rollback()
 
@@ -243,7 +255,7 @@ def realizar_reserva(
         )
 
         return RedirectResponse(
-            url=(
+            (
                 "/reservas"
                 "?mensaje=No+se+pudo+realizar+la+reserva"
                 "&tipo=error"
@@ -252,12 +264,13 @@ def realizar_reserva(
         )
 
     finally:
+
         if cursor is not None:
             cursor.close()
 
         if conn is not None:
             conn.close()
-            
+
 @router.get("/reservas", response_class=HTMLResponse)
 def mostrar_reserva(
     request: Request,
