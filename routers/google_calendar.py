@@ -15,18 +15,32 @@ SCOPES = [
 
 def obtener_credenciales_google():
 
-    client_id = os.getenv("GOOGLE_CLIENT_ID")
-    client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
-    refresh_token = os.getenv("GOOGLE_REFRESH_TOKEN")
+    client_id = os.getenv(
+        "GOOGLE_CLIENT_ID"
+    )
+
+    client_secret = os.getenv(
+        "GOOGLE_CLIENT_SECRET"
+    )
+
+    refresh_token = os.getenv(
+        "GOOGLE_REFRESH_TOKEN"
+    )
 
     if not client_id:
-        raise RuntimeError("Falta GOOGLE_CLIENT_ID")
+        raise RuntimeError(
+            "Falta GOOGLE_CLIENT_ID"
+        )
 
     if not client_secret:
-        raise RuntimeError("Falta GOOGLE_CLIENT_SECRET")
+        raise RuntimeError(
+            "Falta GOOGLE_CLIENT_SECRET"
+        )
 
     if not refresh_token:
-        raise RuntimeError("Falta GOOGLE_REFRESH_TOKEN")
+        raise RuntimeError(
+            "Falta GOOGLE_REFRESH_TOKEN"
+        )
 
     credenciales = Credentials(
         token=None,
@@ -60,29 +74,34 @@ def crear_evento_google(reserva):
     )
 
     if isinstance(reserva.fecha, date):
-        fecha = reserva.fecha
+        fecha_reserva = reserva.fecha
     else:
-        fecha = date.fromisoformat(
+        fecha_reserva = date.fromisoformat(
             str(reserva.fecha)
         )
 
     if isinstance(reserva.horario, time):
-        hora = reserva.horario
+        hora_reserva = reserva.horario
     else:
-        hora = time.fromisoformat(
+        hora_reserva = time.fromisoformat(
             str(reserva.horario)
         )
 
     inicio = datetime.combine(
-        fecha,
-        hora,
+        fecha_reserva,
+        hora_reserva,
         tzinfo=zona_horaria
     )
 
-    fin = inicio + timedelta(hours=1)
+    fin = inicio + timedelta(
+        hours=1
+    )
 
     evento = {
-        "summary": f"{reserva.seccion} - {reserva.nyap}",
+        "summary": (
+            f"{reserva.seccion} - "
+            f"{reserva.nyap}"
+        ),
 
         "description": (
             f"Sesión: {reserva.seccion}\n"
@@ -94,12 +113,14 @@ def crear_evento_google(reserva):
 
         "start": {
             "dateTime": inicio.isoformat(),
-            "timeZone": "America/Argentina/Buenos_Aires"
+            "timeZone":
+                "America/Argentina/Buenos_Aires"
         },
 
         "end": {
             "dateTime": fin.isoformat(),
-            "timeZone": "America/Argentina/Buenos_Aires"
+            "timeZone":
+                "America/Argentina/Buenos_Aires"
         }
     }
 
