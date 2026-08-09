@@ -140,7 +140,7 @@ def obtener_credenciales_google():
     )
 
     refresh_token = os.getenv(
-        "REFRESH_TOKEN"
+        "GOOGLE_REFRESH_TOKEN"
     )
 
     if not client_id:
