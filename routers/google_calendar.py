@@ -28,7 +28,6 @@ SCOPES = [
 # ---------------------------------------------------------
 
 def crear_flow():
-
     client_id = os.getenv("GOOGLE_CLIENT_ID")
     client_secret = os.getenv("GOOGLE_CLIENT_SECRET")
     redirect_uri = os.getenv("GOOGLE_REDIRECT_URI")
@@ -47,17 +46,14 @@ def crear_flow():
             "web": {
                 "client_id": client_id,
                 "client_secret": client_secret,
-                "auth_uri":
-                    "https://accounts.google.com/o/oauth2/auth",
-                "token_uri":
-                    "https://oauth2.googleapis.com/token"
+                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://oauth2.googleapis.com/token"
             }
         },
         scopes=SCOPES,
         redirect_uri=redirect_uri,
         autogenerate_code_verifier=True
     )
-
 
 # ---------------------------------------------------------
 # CONECTAR GOOGLE CALENDAR
