@@ -18,7 +18,7 @@ load_dotenv(BASE_DIR / ".env", override=True)
 app = FastAPI()
 
 
-SESSION_SECRET = os.getenv("SESSION_SECRET")
+SESSION_SECRET = os.getenv("GOOGLE_SESSION_SECRET")
 
 if not SESSION_SECRET:
     raise RuntimeError("Falta SESSION_SECRET en el archivo .env")
