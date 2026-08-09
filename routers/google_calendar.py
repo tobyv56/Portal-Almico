@@ -24,23 +24,8 @@ def obtener_credenciales_google():
     )
 
     refresh_token = os.getenv(
-        "GOOGLE_REFRESH_TOKEN"
+        "REFRESH_TOKEN"
     )
-
-    if not client_id:
-        raise RuntimeError(
-            "Falta GOOGLE_CLIENT_ID"
-        )
-
-    if not client_secret:
-        raise RuntimeError(
-            "Falta GOOGLE_CLIENT_SECRET"
-        )
-
-    if not refresh_token:
-        raise RuntimeError(
-            "Falta GOOGLE_REFRESH_TOKEN"
-        )
 
     credenciales = Credentials(
         token=None,
