@@ -94,8 +94,13 @@ def google_callback(
     code: str,
     state: str
 ):
-    state_guardado = request.session.get("google_oauth_state")
-    code_verifier = request.session.get("google_code_verifier")
+    state_guardado = request.session.get(
+        "google_oauth_state"
+    )
+
+    code_verifier = request.session.get(
+        "google_code_verifier"
+    )
 
     if state != state_guardado:
         return RedirectResponse(
@@ -104,9 +109,12 @@ def google_callback(
         )
 
     flow = crear_flow()
+
     flow.code_verifier = code_verifier
 
-    flow.fetch_token(code=code)
+    flow.fetch_token(
+        code=code
+    )
 
     credenciales = flow.credentials
 
@@ -114,17 +122,28 @@ def google_callback(
 
     if not refresh_token:
         return RedirectResponse(
-            "/admin/?mensaje=Google+no+entrego+refresh+token&tipo=error",
+            (
+                "/admin/"
+                "?mensaje=Google+no+entrego+refresh+token"
+                "&tipo=error"
+            ),
             status_code=303
         )
 
-    print("REFRESH TOKEN OBTENIDO:", bool(refresh_token))
-
-    return RedirectResponse(
-        "/admin/?mensaje=Google+Calendar+conectado&tipo=success",
-        status_code=303
+    # TEMPORAL: solo para obtenerlo una vez
+    print(
+        "REFRESH TOKEN:",
+        refresh_token
     )
 
+    return RedirectResponse(
+        (
+            "/admin/"
+            "?mensaje=Google+Calendar+conectado"
+            "&tipo=success"
+        ),
+        status_code=303
+    )
 # ---------------------------------------------------------
 # CREDENCIALES PARA CREAR EVENTOS
 # ---------------------------------------------------------
