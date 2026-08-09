@@ -94,100 +94,36 @@ def google_callback(
     code: str,
     state: str
 ):
-
-    state_guardado = request.session.get(
-        "google_oauth_state"
-    )
-
-    code_verifier = request.session.get(
-        "google_code_verifier"
-    )
-
-    if not state_guardado:
-        return RedirectResponse(
-            (
-                "/admin/"
-                "?mensaje=La+sesion+OAuth+expiro"
-                "&tipo=error"
-            ),
-            status_code=303
-        )
+    state_guardado = request.session.get("google_oauth_state")
+    code_verifier = request.session.get("google_code_verifier")
 
     if state != state_guardado:
-        request.session.pop(
-            "google_oauth_state",
-            None
-        )
-
-        request.session.pop(
-            "google_code_verifier",
-            None
-        )
-
         return RedirectResponse(
-            (
-                "/admin/"
-                "?mensaje=Error+de+seguridad+OAuth"
-                "&tipo=error"
-            ),
+            "/admin/?mensaje=Error+OAuth&tipo=error",
             status_code=303
         )
 
-    try:
+    flow = crear_flow()
+    flow.code_verifier = code_verifier
 
-        flow = crear_flow()
+    flow.fetch_token(code=code)
 
-        # Tiene que ser el mismo verifier usado al iniciar OAuth.
-        flow.code_verifier = code_verifier
+    credenciales = flow.credentials
 
-        flow.fetch_token(
-            code=code
-        )
+    refresh_token = credenciales.refresh_token
 
-        credenciales = flow.credentials
-
-        # NO imprimir el token real.
-        print(
-            "GOOGLE CONECTADO:",
-            credenciales.refresh_token is not None
-        )
-
-        # Limpiamos datos temporales de OAuth.
-        request.session.pop(
-            "google_oauth_state",
-            None
-        )
-
-        request.session.pop(
-            "google_code_verifier",
-            None
-        )
-
+    if not refresh_token:
         return RedirectResponse(
-            (
-                "/admin/"
-                "?mensaje=Google+Calendar+conectado"
-                "&tipo=success"
-            ),
+            "/admin/?mensaje=Google+no+entrego+refresh+token&tipo=error",
             status_code=303
         )
 
-    except Exception as error:
+    print("REFRESH TOKEN OBTENIDO:", bool(refresh_token))
 
-        print(
-            "ERROR CALLBACK GOOGLE:",
-            repr(error)
-        )
-
-        return RedirectResponse(
-            (
-                "/admin/"
-                "?mensaje=No+se+pudo+conectar+Google+Calendar"
-                "&tipo=error"
-            ),
-            status_code=303
-        )
-
+    return RedirectResponse(
+        "/admin/?mensaje=Google+Calendar+conectado&tipo=success",
+        status_code=303
+    )
 
 # ---------------------------------------------------------
 # CREDENCIALES PARA CREAR EVENTOS
