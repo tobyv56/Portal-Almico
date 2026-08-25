@@ -1,15 +1,11 @@
-from fastapi import APIRouter, Request, Form,HTTPException
-from fastapi.responses import HTMLResponse
-from typing import Annotated
-
-from configuracion import templates
+from fastapi import APIRouter, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse
-from routers.reservas import RepositorioReserva
+from typing import Annotated
+import traceback
 
 from configuracion import templates
 from database import get_db
-import traceback
-
+from routers.reservas import RepositorioReserva
 from routers.seguridad import (
     hashear_contrasena,
     verificar_contrasena
@@ -141,6 +137,7 @@ class RepositorioUsuario:
 
         return self.cursor.rowcount > 0
 
+
 def obtener_usuario_actual(request: Request) -> Usuario:
 
     print("SESIÓN AL CREAR TALLER:", dict(request.session))
@@ -200,7 +197,8 @@ def obtener_usuario_actual(request: Request) -> Usuario:
         if conn is not None:
             conn.close()
 
-@router.get("/registro",response_class=HTMLResponse)
+
+@router.get("/registro", response_class=HTMLResponse)
 def mostrar_registro(
     request: Request,
     mensaje: str | None = None,
@@ -215,18 +213,107 @@ def mostrar_registro(
         }
     )
 
-@router.get("/login",response_class=HTMLResponse)
-def mostrar_login( request: Request,
-                   mensaje: str | None = None,
-                   tipo: str | None = None):
+
+@router.post("/registro", response_class=HTMLResponse)
+def registro_usuario(
+    request: Request,
+    telefono: Annotated[str, Form()], 
+    email: Annotated[str, Form()],
+    contrasena: Annotated[str, Form()],
+    confirmarContrasena: Annotated[str, Form()], 
+    nombreApellido: Annotated[str, Form()]
+):
+    conn, cursor = get_db()
+
+    if contrasena != confirmarContrasena:
+        return RedirectResponse(
+            url=(
+                "/admin/registro"
+                "?mensaje=Las+contraseñas+no+coinciden"
+                "&tipo=warning"
+            ),
+            status_code=303
+        )
+
+    if not telefono.isdigit() or len(telefono) != 10:
+        return RedirectResponse(
+            url=(
+                "/admin/registro"
+                "?mensaje=El+telefono+debe+tener+10+numeros"
+                "&tipo=warning"
+            ),
+            status_code=303
+        )
+
+    try: 
+        repositorioUsuario = RepositorioUsuario(cursor)
+
+        email_normalizado = email.strip().lower()
+        contrasena_hasheada = hashear_contrasena(contrasena)
+
+        usuario_existente = repositorioUsuario.buscar_por_email(email_normalizado)
+
+        if usuario_existente is not None:
+           return RedirectResponse(
+               url=(
+                   "/admin/registro"
+                   "?mensaje=Ya+existe+una+cuenta+con+ese+email"
+                   "&tipo=warning"
+                ),
+               status_code=303
+           )
+
+        usuario = Usuario(nombreApellido, email, contrasena_hasheada, telefono, rol="usuario")
+
+        repositorioUsuario.crear_usuario(usuario)
+        conn.commit()
+
+        return RedirectResponse(
+            url=(
+                "/admin/registro"
+                "?mensaje=Cuenta+creada+correctamente"
+                "&tipo=success"
+            ),
+            status_code=303
+        )
+
+    except Exception as error:
+        conn.rollback()
+
+        print(
+            "Error al registrar usuario:",
+            repr(error)
+        )
+
+        return RedirectResponse(
+            url=(
+                "/admin/registro"
+                "?mensaje=No+se+pudo+crear+la+cuenta"
+                "&tipo=error"
+            ),
+            status_code=303
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@router.get("/login", response_class=HTMLResponse)
+def mostrar_login(
+    request: Request,
+    mensaje: str | None = None,
+    tipo: str | None = None
+):
     return templates.TemplateResponse(
-                        request=request,
-                        name="login.html",
-                        context={
-                            "mensaje": mensaje,
-                            "tipo": tipo
-                        }
-                )
+        request=request,
+        name="login.html",
+        context={
+            "mensaje": mensaje,
+            "tipo": tipo
+        }
+    )
+
 
 @router.post("/login")
 def iniciar_sesion_admin(
@@ -307,6 +394,7 @@ def iniciar_sesion_admin(
         if conn is not None:
             conn.close()
 
+
 @router.get("/", response_class=HTMLResponse)
 def mostrar_panel_admin(
     request: Request,
@@ -370,124 +458,3 @@ def mostrar_panel_admin(
 
         if conn is not None:
             conn.close()
-    
-
-@router.get("/admin", response_class=HTMLResponse)
-def mostrar_administracion(
-    request: Request,
-    mensaje: str | None = None,
-    tipo: str | None = None
-):
-    conn, cursor = get_db()
-
-    try:
-        cursor.execute("""
-            SELECT email, nyap
-            FROM usuario
-            ORDER BY nyap
-        """)
-
-        usuarios = cursor.fetchall()
-
-        print("USUARIOS ENCONTRADOS:", usuarios)
-
-        return templates.TemplateResponse(
-            request=request,
-            name="admin.html",
-            context={
-                "usuarios": usuarios,
-                "mensaje": mensaje,
-                "tipo": tipo
-            }
-        )
-
-    finally:
-        cursor.close()
-        conn.close()
-
-@router.post("/registro", response_class=HTMLResponse)
-def registro_usuario(
-    request: Request,
-    telefono: Annotated[str, Form()], 
-    email: Annotated[str, Form()],
-    contrasena: Annotated[str, Form()],
-    confirmarContrasena: Annotated[str, Form()], 
-    nombreApellido: Annotated[str, Form()]
-):
-
-    conn, cursor = get_db()
-
-    if contrasena != confirmarContrasena:
-        return RedirectResponse(
-            url=(
-                "/admin/registro"
-                "?mensaje=Las+contraseñas+no+coinciden"
-                "&tipo=warning"
-            ),
-            status_code=303
-        )
-
-    if not telefono.isdigit() or len(telefono) != 10:
-        return RedirectResponse(
-            url=(
-                "/admin/registro"
-                "?mensaje=El+telefono+debe+tener+10+numeros"
-                "&tipo=warning"
-            ),
-            status_code=303
-        )
-
-    try: 
-        repositorioUsuario = RepositorioUsuario(cursor)
-
-        email_normalizado = email.strip().lower()
-        contrasena_hasheada = hashear_contrasena(contrasena)
-
-        usuario_existente = repositorioUsuario.buscar_por_email(email_normalizado)
-
-        if usuario_existente is not None:
-
-           return RedirectResponse(
-               url=(
-                   "/admin/registro"
-                   "?mensaje=Ya+existe+una+cuenta+con+ese+email"
-                   "&tipo=warning"
-                ),
-               status_code=303
-           )
-
-        usuario = Usuario(nombreApellido,email,contrasena_hasheada,telefono,rol="usuario")
-
-        repositorioUsuario.crear_usuario(usuario)
-        conn.commit()
-
-        return RedirectResponse(
-        url=(
-        "/admin/registro"
-        "?mensaje=Cuenta+creada+correctamente"
-        "&tipo=success"
-        ),
-        status_code=303
-        )
-
-    except Exception as error:
-        conn.rollback()
-
-        print(
-            "Error al registrar usuario:",
-            repr(error)
-        )
-
-        return RedirectResponse(
-            url=(
-                "/admin/registro"
-                "?mensaje=No+se+pudo+crear+la+cuenta"
-                "&tipo=error"
-            ),
-            status_code=303
-        )
-
-    finally:
-        cursor.close()
-        conn.close()
-
