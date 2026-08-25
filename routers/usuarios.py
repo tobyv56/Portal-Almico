@@ -420,7 +420,7 @@ def registro_usuario(
     if contrasena != confirmarContrasena:
         return RedirectResponse(
             url=(
-                "/usuarios/registro"
+                "/admin/registro"
                 "?mensaje=Las+contraseñas+no+coinciden"
                 "&tipo=warning"
             ),
@@ -430,7 +430,7 @@ def registro_usuario(
     if not telefono.isdigit() or len(telefono) != 10:
         return RedirectResponse(
             url=(
-                "/usuarios/registro"
+                "/admin/registro"
                 "?mensaje=El+telefono+debe+tener+10+numeros"
                 "&tipo=warning"
             ),
@@ -449,7 +449,7 @@ def registro_usuario(
 
            return RedirectResponse(
                url=(
-                   "/usuarios/registro"
+                   "/admin/registro"
                    "?mensaje=Ya+existe+una+cuenta+con+ese+email"
                    "&tipo=warning"
                 ),
@@ -463,7 +463,7 @@ def registro_usuario(
 
         return RedirectResponse(
         url=(
-        "/usuarios/registro"
+        "/admin/registro"
         "?mensaje=Cuenta+creada+correctamente"
         "&tipo=success"
         ),
