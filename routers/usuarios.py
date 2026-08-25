@@ -372,19 +372,6 @@ def mostrar_panel_admin(
             conn.close()
     
 
-@router.get("/registro",response_class=HTMLResponse)
-def mostrar_registro( request: Request,
-    mensaje: str | None = None,
-    tipo: str | None = None):
-    return templates.TemplateResponse(
-        request=request,
-        name="registro.html",
-        context={
-            "mensaje": mensaje,
-            "tipo": tipo
-        }
-    )
-
 @router.get("/admin", response_class=HTMLResponse)
 def mostrar_administracion(
     request: Request,
