@@ -372,7 +372,7 @@ def mostrar_panel_admin(
             conn.close()
     
 
-@router.get("/registroUsuario",response_class=HTMLResponse)
+@router.get("/registro",response_class=HTMLResponse)
 def mostrar_registro( request: Request,
     mensaje: str | None = None,
     tipo: str | None = None):
