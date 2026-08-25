@@ -20,18 +20,11 @@ def contexto_sesion(request: Request):
     }
     
 @router.get("/", response_class=HTMLResponse)
-def mostrar_inicio(request: Request,
-                   mensaje: str | None = None,
-                   tipo: str | None = None):
-
-    id_usuario = request.session.get("idusuario")
-
-    if id_usuario is None:
-        return RedirectResponse(
-            url="/?mensaje=Debes+iniciar+sesion&tipo=warning",
-            status_code=303
-        )
-
+def mostrar_inicio(
+    request: Request,
+    mensaje: str | None = None,
+    tipo: str | None = None
+):
     conn, cursor = get_db()
 
     try:
@@ -62,9 +55,10 @@ def mostrar_inicio(request: Request,
                 "es_admin": rol_usuario == "admin"
             }
         )
-    
+
     except Exception as error:
         print("ERROR AL OBTENER TALLERES:", repr(error))
+
         return templates.TemplateResponse(
             request=request,
             name="index.html",
@@ -80,7 +74,6 @@ def mostrar_inicio(request: Request,
     finally:
         cursor.close()
         conn.close()
-
 
 @router.get("/presentacion", response_class=HTMLResponse)
 def mostrar_presentacion(request: Request):
