@@ -480,7 +480,7 @@ def registro_usuario(
 
         return RedirectResponse(
             url=(
-                "/usuarios/registro"
+                "/admin/registro"
                 "?mensaje=No+se+pudo+crear+la+cuenta"
                 "&tipo=error"
             ),
