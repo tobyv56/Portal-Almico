@@ -11,6 +11,7 @@ from routers.talleres import router as talleres_router
 from routers.usuarios import router as usuarios_router
 from routers.reservas import router as reservas_router
 from routers.google_calendar import router as googlec_router
+from routers.secciones import router as seccion_router
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -19,7 +20,7 @@ load_dotenv(BASE_DIR / ".env", override=True)
 app = FastAPI()
 
 
-SESSION_SECRET = os.getenv("GOOGLE_SESSION_SECRET")
+SESSION_SECRET = os.getenv("SESSION_SECRET")
 
 if not SESSION_SECRET:
     raise RuntimeError("Falta SESSION_SECRET en el archivo .env")
@@ -43,6 +44,8 @@ app.include_router(talleres_router)
 app.include_router(usuarios_router)
 app.include_router(reservas_router)
 app.include_router(googlec_router)
+app.include_router(seccion_router)
+
 
 
     
