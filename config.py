@@ -12,6 +12,9 @@ from routers.usuarios import router as usuarios_router
 from routers.reservas import router as reservas_router
 from routers.google_calendar import router as googlec_router
 from routers.secciones import router as seccion_router
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
+from routers.reservas import limpiar_reservas_viejas
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -46,8 +49,15 @@ app.include_router(reservas_router)
 app.include_router(googlec_router)
 app.include_router(seccion_router)
 
+scheduler = AsyncIOScheduler()
 
+scheduler.add_job(
+    limpiar_reservas_viejas,
+    "interval",
+    minutes=1
+)
 
+scheduler.start()
     
     
 
