@@ -79,6 +79,49 @@
         </p>
     </div>
 
+    <!--creacion seccion-->
+<div class="collapse mb-4" id="collapseCrearSeccion">
+            <div class="container bg-white p-4 rounded-4 shadow-sm border">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 text-center">
+                        <form action="/creacionSeccion" method="POST" enctype="multipart/form-data">
+                            
+                            <h2 class="fs-4 fw-bold text-secondary mb-2">Nombre Seccion</h2>
+                            <input type="text" name="nombre" class="form-control w-75 mx-auto mb-4" required>
+
+                            <h2 class="fs-4 fw-bold text-secondary mb-2">Imagen</h2>
+                                <div class="w-75 mx-auto mb-4">
+                                    <input class="form-control" type="file" name="imagen" accept="image/*" required>
+                                </div>
+                            
+                            <h2 class="fs-4 fw-bold text-secondary mb-2">Descripción</h2>
+                            <textarea name="descripcion" class="form-control w-75 mx-auto mb-4" rows="3"></textarea>
+
+                            <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill fw-bold">Subir Seccion</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+</div> 
+
+<!--eliminacion seccion-->
+<div class="collapse mb-4" id="collapseEliminarSeccion">
+        <div class="container bg-white p-4 rounded-4 shadow-sm border">
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center">
+                    <form action="/cursos/eliminacion" method="POST" enctype="multipart/form-data">
+                        
+                        <h2>Que Seccion desea eliminar?</h2>
+                        <input type="text" name="nombreTaller" class="form-control w-75 mx-auto mb-4" required>
+
+                        <button type="submit" class="btn btn-primary btn-lg px-5 rounded-pill fw-bold">Eliminar Seccion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+</div> 
+
+
     <div class="collapse mb-4" id="collapseCrear">
             <div class="container bg-white p-4 rounded-4 shadow-sm border">
                 <div class="row justify-content-center">
