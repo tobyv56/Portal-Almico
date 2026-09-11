@@ -54,7 +54,7 @@ scheduler = AsyncIOScheduler()
 scheduler.add_job(
     limpiar_reservas_viejas,
     "interval",
-    minutes=1
+    weeks=1
 )
 
 scheduler.start()
