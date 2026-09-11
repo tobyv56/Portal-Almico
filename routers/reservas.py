@@ -16,6 +16,24 @@ router = APIRouter(
     tags=["Páginas"]
 )
 
+async def limpiar_reservas_viejas():
+
+    conn, cursor = get_db()
+
+    try:
+
+        print("limpiando....")
+        
+        repositorio = RepositorioReserva(cursor)
+
+        repositorio.eliminar_reservas_viejas()
+
+        conn.commit()
+
+    finally:
+        cursor.close()
+        conn.close()
+
 class Reserva:
     def __init__(self,facilitadora,seccion,fecha,horario,nyap,email,telefono):
         self.facilitadora = facilitadora
@@ -30,6 +48,15 @@ class RepositorioReserva:
 
     def __init__(self, cursor):
         self.cursor = cursor
+
+    def eliminar_reservas_viejas(self):
+        print("Limpiando reservas viejas...")
+
+        self.cursor.execute("""
+                            DELETE FROM turno
+                            WHERE fecha < CURRENT_DATE - INTERVAL '6 months'
+                            """)
+        return self.cursor.rowcount
 
     def crear_reserva(self, reserva):
         self.cursor.execute(
