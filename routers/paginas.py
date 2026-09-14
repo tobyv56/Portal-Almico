@@ -5,7 +5,7 @@ from configuracion import templates
 from database import get_db
 
 router = APIRouter(
-    tags=["Páginas"]
+    tags=["Páginas"] #seccion=/paginas
 )
 
 def contexto_sesion(request: Request):
@@ -17,7 +17,7 @@ def contexto_sesion(request: Request):
         "rol_usuario": rol_usuario,
         "usuario_logueado": id_usuario is not None,
         "es_admin": rol_usuario == "admin"
-    }
+    } #retorna los datos del admin
     
 @router.get("/", response_class=HTMLResponse)
 def mostrar_inicio(request: Request,
@@ -38,11 +38,11 @@ def mostrar_inicio(request: Request,
             ORDER BY idcurso DESC
             LIMIT 3
             """
-        )
+        ) #esta consulta se encarga de devolver los datos de los 3 cards de la pag principal
 
         talleres = cursor.fetchall()
 
-        rol_usuario = request.session.get("rol")
+        rol_usuario = request.session.get("rol") #devuelve el rol del admin
 
         return templates.TemplateResponse(
             request=request,
@@ -91,10 +91,10 @@ def mostrar_ubicacion(request: Request):
         request=request,
         name="ubicacion.html",
         context={
-            **contexto_sesion(request)
+            **contexto_sesion(request) #lo convierte todos los datos en context(jinja)
         }
     )
 
 @router.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok"} #mantiene vivo la pagina
