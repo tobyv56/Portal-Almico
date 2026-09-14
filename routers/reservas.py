@@ -13,10 +13,10 @@ from datetime import date
 from routers.google_calendar import crear_evento_google
 
 router = APIRouter(
-    tags=["Páginas"]
+    tags=["Reservas"] #seccion=reservas
 )
 
-async def limpiar_reservas_viejas():
+async def limpiar_reservas_viejas(): #esta fun se dedica a limpiar reservas que ya pasaron se ejecuta cada dia
 
     conn, cursor = get_db()
 
@@ -54,8 +54,8 @@ class RepositorioReserva:
 
         self.cursor.execute("""
                             DELETE FROM turno
-                            WHERE fecha < CURRENT_DATE - INTERVAL '6 months'
-                            """)
+                            WHERE fecha < CURRENT_DATE - INTERVAL '1 months'
+                            """) #limpia la reservas con un intervalo de 1 mes
         return self.cursor.rowcount
 
     def crear_reserva(self, reserva):
@@ -81,7 +81,7 @@ class RepositorioReserva:
                 reserva.email,
                 reserva.telefono
             )
-        )
+        ) #esta consulta se dedica a construir la reserva
 
     def obtener_reservas(self):
         self.cursor.execute(
@@ -95,26 +95,26 @@ class RepositorioReserva:
             FROM turno
             ORDER BY fecha ASC, hora ASC
             """
-        )
+        ) #esta consulta sirve para mostrarle todas las reservas en el panel del admin
 
         return self.cursor.fetchall()
 
     def obtener_horarios_ocupados(self, facilitadora, fecha):
         self.cursor.execute(
         """
-        SELECT TO_CHAR(hora, 'HH24:MI') AS horario
+        SELECT TO_CHAR(hora, 'HH24:MI') AS horario #formato de horario
         FROM turno
         WHERE facilitadora = %s
           AND fecha = %s
         """,
         (facilitadora, fecha)
-        )
+        ) #esta consulta sirve para determinar los botones desabilitados de la reserva
 
         filas = self.cursor.fetchall()
 
         return [
             fila["horario"]
-            for fila in filas
+            for fila in filas #va agregando los horarios ocupados (es un equivalente de un .append())
         ]
 
     def horario_esta_ocupado(
@@ -136,10 +136,10 @@ class RepositorioReserva:
             facilitadora,
             fecha,
             horario
-        )
+        ) #hace lo mismo que la fun anterior 
     )
 
-        return self.cursor.fetchone() is not None
+        return self.cursor.fetchone() is not None #pregunta si la consulta no es vacio
     
 @router.post("/reservas")
 def realizar_reserva(
@@ -163,12 +163,12 @@ def realizar_reserva(
 
     telefono_normalizado = (
         telefono
-        .strip()
+        .strip() #saca los espacios
         .replace(" ", "")
         .replace("-", "")
     )
 
-    if not all([
+    if not all([ #este flujo se dedica a verificar si el usuario lleno todos los campos, en caso contrario retorna una ventana que llene los campos
         facilitadora,
         seccion,
         fecha,
@@ -186,14 +186,14 @@ def realizar_reserva(
             status_code=303
         )
 
-    if not telefono_normalizado.isdigit():
+    if not telefono_normalizado.isdigit(): #aca pregunta si el telefono es solo digitos por ej no acepta 5967g065
         return RedirectResponse(
             (
                 "/reservas"
                 "?mensaje=El+telefono+no+es+valido"
                 "&tipo=warning"
             ),
-            status_code=303
+            status_code=303 
         )
 
     try:
@@ -203,12 +203,12 @@ def realizar_reserva(
             cursor
         )
 
-        if repositorio_reserva.horario_esta_ocupado(
+        if repositorio_reserva.horario_esta_ocupado( #este flujo le salta una ventana si el horario esta ocupado
             facilitadora,
             fecha,
             horario
         ):
-            return RedirectResponse(
+            return RedirectResponse( 
                 (
                     "/reservas"
                     "?mensaje=Ese+horario+ya+fue+reservado"
