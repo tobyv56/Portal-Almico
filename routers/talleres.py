@@ -19,21 +19,21 @@ from database import get_db
 from routers.usuarios import (Usuario,obtener_usuario_actual)
 
 router = APIRouter(
-    tags=["Talleres"]
+    tags=["Talleres"] #seccion= Talleres
 )
 
 @router.post("/cursos/eliminacion")
 def eliminar_taller(
-    nombreTaller: Annotated[str, Form()],
+    nombreTaller: Annotated[str, Form()], 
     usuarioActual:Annotated[
         Usuario,
-        Depends(obtener_usuario_actual)
+        Depends(obtener_usuario_actual) #crea el objeto Usuario 
     ]
 ):
 
     conn, cursor = get_db()
 
-    if not Usuario.tiene_permisos(usuarioActual):
+    if not Usuario.tiene_permisos(usuarioActual): #si no tiene rol admin no le deja crear el taller
         return RedirectResponse(
             url="/cursos?mensaje=No+tenes+permisos&tipo=error",
             status_code=303
@@ -42,9 +42,9 @@ def eliminar_taller(
     talleres = RepositorioTalleres(cursor)
 
     try:
-        fue_eliminado = talleres.eliminacion_taller(nombreTaller)
+        fue_eliminado = talleres.eliminacion_taller(nombreTaller) 
 
-        if not fue_eliminado:
+        if not fue_eliminado: #si no se encontro el taller va a retornar un error
 
             conn.rollback()
 
@@ -71,7 +71,7 @@ def eliminar_taller(
     except Exception as error:
         conn.rollback()
 
-        print("Error al eliminar taller:", error)
+        print("Error al eliminar taller:", error) #aca se demuestra explicitamente xq no se elimnina el taller
 
         return RedirectResponse(
             url=(
@@ -93,9 +93,9 @@ def mostrar_pag_talleres(
     tipo: str | None = None
 ):  
     
-    id_usuario = request.session.get("idusuario")
+    id_usuario = request.session.get("idusuario") #devuelve el id del usuario
     
-    if id_usuario is None:
+    if id_usuario is None: #si todavia no inicia sesion
             return RedirectResponse(
                 url="/?mensaje=Debes+iniciar+sesion&tipo=warning",
                 status_code=303
@@ -104,7 +104,7 @@ def mostrar_pag_talleres(
     conn, cursor = get_db()
     
     try:
-            cursor.execute(
+            cursor.execute( #esta consulta sirve para armar las cards de la pagina
                 """
                 SELECT
                     nombrecurso,
@@ -119,7 +119,7 @@ def mostrar_pag_talleres(
     
             talleres = cursor.fetchall()
     
-            rol_usuario = request.session.get("rol")
+            rol_usuario = request.session.get("rol") #devuelve el rol del usuario
     
             return templates.TemplateResponse(
                 request=request,
