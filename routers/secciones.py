@@ -1,5 +1,4 @@
 from typing import Annotated
-from routers.usuarios import Usuario
 
 import cloudinary.uploader
 
@@ -10,7 +9,6 @@ from fastapi import (
     Request,
     UploadFile,
     Depends,
-    HTTPException
 )
 from fastapi.responses import HTMLResponse, RedirectResponse
 
@@ -19,7 +17,7 @@ from database import get_db
 from routers.usuarios import (Usuario,obtener_usuario_actual)
 
 router = APIRouter(
-    tags=["Talleres"] #seccion=talleres
+    tags=["Secciones"] #seccion=talleres sirve para agrupar los endpoints
 )
 
 def contexto_sesion(request: Request): #devuelve el idUsuario y el rol
@@ -33,8 +31,8 @@ def contexto_sesion(request: Request): #devuelve el idUsuario y el rol
         "es_admin": rol_usuario == "admin"
     }
 
-@router.get("/infoSecciones", response_class=HTMLResponse)
-def mostrar_ubicacion(request: Request):
+@router.get("/info_secciones", response_class=HTMLResponse)
+def mostrar_seccion(request: Request):
 
     conn, cursor = get_db()
 
@@ -43,8 +41,6 @@ def mostrar_ubicacion(request: Request):
         repositorio = RepositorioSeccion(cursor)
 
         secciones = repositorio.obtener_todos() #devuelve todas las secciones
-
-        print(secciones)
 
         return templates.TemplateResponse(
             request=request,
@@ -59,8 +55,8 @@ def mostrar_ubicacion(request: Request):
         cursor.close()
         conn.close()
 
-@router.post("/creacionSeccion")
-def crearSeccion(nombre: Annotated[str, Form()],
+@router.post("/creacion_seccion")
+def crear_seccion(nombre: Annotated[str, Form()],
                  descripcion: Annotated[str, Form()],
                  imagen: Annotated[UploadFile, File()],
                  usuarioActual:Annotated[
@@ -68,42 +64,113 @@ def crearSeccion(nombre: Annotated[str, Form()],
                          Depends(obtener_usuario_actual) #lo convierte en un objeto tipo Usuario
                      ]):
 
-    conn, cursor = get_db()
-
     if not usuarioActual.tiene_permisos(): #se dedica a ver si no es rol admin no puede crear ni eliminar secciones
         return RedirectResponse(
             url="/cursos?mensaje=No+tenes+permisos&tipo=error",
             status_code=303
         )
 
-    repositorioSeccion = RepositorioSeccion(cursor)
-    resultado = cloudinary.uploader.upload( #sube la imagen a cloudinary
-                imagen.file,
-                folder="portal-almico/creacionSeccion",
-                resource_type="image"
-            )
+    conn, cursor = get_db()
 
-    #print("RESULTADO CLOUDINARY:", resultado)
-    #print("URL:", resultado["secure_url"])
+    #manejo de try para garantizar el control completo de la conexion
+    try:
 
-    seccion = Seccion( #crea el objeto Seccion
-        nombre= nombre,
-        descripcion= descripcion,
-        imagen = resultado["secure_url"]
-    )
+        repositorio_seccion = RepositorioSeccion(cursor)
+        resultado = cloudinary.uploader.upload( #sube la imagen a cloudinary
+                    imagen.file,
+                    folder="portal-almico/creacionSeccion",
+                    resource_type="image"
+                )
 
-    repositorioSeccion.crearSeccion(seccion)
+        seccion.validar()
+        #print("RESULTADO CLOUDINARY:", resultado)
+        #print("URL:", resultado["secure_url"])
 
-    conn.commit()
-    
+        seccion = Seccion( #crea el objeto Seccion
+            nombre= nombre,
+            descripcion= descripcion,
+            imagen = resultado["secure_url"]
+        )
+
+        repositorio_seccion.crear_seccion(seccion)
+
+        conn.commit()
+
+    except Exception as error:
+
+        print("ERROR:", repr(error)) #me tira error en los logs de la consola
+        conn.rollback() #rollbackeo para que no sufra ninguna modificacion la petision
+
+        return RedirectResponse(
+        url="/info_secciones?mensaje=No+se+pudo+crear+la+seccion&tipo=error",
+        status_code=303
+        )
+
+    finally:
+        #cierro conexion
+        cursor.close()
+        conn.close()
+        
     return RedirectResponse(
                 url=(
-                    "/infoSecciones"
+                    "/info_secciones"
                     "?mensaje=Seccion+creado+correctamente"
                     "&tipo=success"
                 ),
                 status_code=303
             )
+@router.post("/eliminar_seccion/{id_seccion}")
+def eliminar_seccion(
+    id_seccion: int,
+    usuario_actual: Annotated[
+        Usuario,
+        Depends(obtener_usuario_actual)
+    ]
+):
+
+    if not usuario_actual.tiene_permisos():
+        return RedirectResponse(
+            url="/info_secciones?mensaje=No+tenes+permisos&tipo=error",
+            status_code=303
+        )
+
+    conn, cursor = get_db()
+
+    try:
+        repositorio_seccion = RepositorioSeccion(cursor)
+
+        fue_eliminada = repositorio_seccion.eliminar_seccion(
+            id_seccion
+        )
+
+        if not fue_eliminada: #pregunta si existe la seccion
+            conn.rollback()
+
+            return RedirectResponse(
+                url="/info_secciones?mensaje=La+seccion+no+existe&tipo=error",
+                status_code=303
+            )
+
+        conn.commit()
+
+        return RedirectResponse(
+            url="/info_secciones?mensaje=Seccion+eliminada+correctamente&tipo=success",
+            status_code=303
+        )
+
+    except Exception as error:
+        print("ERROR AL ELIMINAR SECCION:", repr(error))
+
+        conn.rollback()
+
+        return RedirectResponse(
+            url="/info_secciones?mensaje=No+se+pudo+eliminar+la+seccion&tipo=error",
+            status_code=303
+        )
+
+    finally:
+        cursor.close()
+        conn.close()
 
 class Seccion:
 
@@ -123,8 +190,8 @@ class Seccion:
     
             if not self.descripcion or not self.descripcion.strip():
                 raise ValueError("La descripción no puede estar vacía")
-    
-            if not self.imagen or not self.url_imagen.strip():
+     
+            if not self.imagen or not self.imagen.strip():
                 raise ValueError("La imagen no puede estar vacía")
 
 class RepositorioSeccion:
@@ -141,7 +208,7 @@ class RepositorioSeccion:
     
             return self.cursor.fetchall()
 
-    def crearSeccion(self,seccion):
+    def crear_seccion(self,seccion):
             self.cursor.execute( #crea la seccion en la bdd
                         """
                         INSERT INTO seccion
@@ -156,13 +223,13 @@ class RepositorioSeccion:
                         )
                     )
     
-    def eliminacion_seccion(self, nombreSeccion):
-            self.cursor.execute( #elimina la seccion en la bdd
-                """
-                DELETE FROM seccion
-                WHERE nombreseccion = %s
-                """,
-                (nombreSeccion,)
-                )
-    
-            return self.cursor.rowcount > 0
+    def eliminar_seccion(self, id_seccion):
+        self.cursor.execute(
+        """
+        DELETE FROM seccion
+        WHERE idseccion = %s
+        """,
+        (id_seccion,)
+        )
+
+        return self.cursor.rowcount > 0
