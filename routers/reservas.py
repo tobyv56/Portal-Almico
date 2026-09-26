@@ -1,22 +1,17 @@
-from fastapi import APIRouter, Request, Form,HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
 from typing import Annotated
 
 from configuracion import templates
-from fastapi.responses import HTMLResponse, RedirectResponse
-
-from configuracion import templates
 from database import get_db
-import traceback
 
-from datetime import date
 from routers.google_calendar import crear_evento_google
 
 router = APIRouter(
     tags=["Reservas"] #seccion=reservas
 )
 
-async def limpiar_reservas_viejas(): #esta fun se dedica a limpiar reservas que ya pasaron se ejecuta cada dia
+def limpiar_reservas_viejas(): #esta fun se dedica a limpiar reservas que ya pasaron se ejecuta cada dia
 
     conn, cursor = get_db()
 
@@ -30,6 +25,12 @@ async def limpiar_reservas_viejas(): #esta fun se dedica a limpiar reservas que 
 
         conn.commit()
 
+    except Exception as error:
+
+        print("error en limpiar las reservas: ", repr(error))
+
+        conn.rollback()
+    
     finally:
         cursor.close()
         conn.close()
@@ -44,6 +45,25 @@ class Reserva:
         self.email = email
         self.telefono = telefono
 
+    def validar(self):
+        if not all([
+        self.facilitadora,
+        self.seccion,
+        self.fecha,
+        self.horario,
+        self.nyap,
+        self.email,
+        self.telefono
+        ]):
+            raise ValueError("Completa todos los campos")
+        
+        if not self.telefono.isdigit():
+            raise ValueError("numero de telefono invalido")
+        
+        if "@" not in self.email:
+            raise ValueError("email invalido")
+      
+        
 class RepositorioReserva:
 
     def __init__(self, cursor):
@@ -54,7 +74,7 @@ class RepositorioReserva:
 
         self.cursor.execute("""
                             DELETE FROM turno
-                            WHERE fecha < CURRENT_DATE - INTERVAL '1 months'
+                            WHERE fecha < CURRENT_DATE - INTERVAL '1 month'
                             """) #limpia la reservas con un intervalo de 1 mes
         return self.cursor.rowcount
 
@@ -102,11 +122,11 @@ class RepositorioReserva:
     def obtener_horarios_ocupados(self, facilitadora, fecha):
         self.cursor.execute(
         """
-        SELECT TO_CHAR(hora, 'HH24:MI') AS horario #formato de horario
+        SELECT TO_CHAR(hora, 'HH24:MI') AS horario 
         FROM turno
         WHERE facilitadora = %s
           AND fecha = %s
-        """,
+        """, #formato de horario
         (facilitadora, fecha)
         ) #esta consulta sirve para determinar los botones desabilitados de la reserva
 
@@ -168,35 +188,19 @@ def realizar_reserva(
         .replace("-", "")
     )
 
-    if not all([ #este flujo se dedica a verificar si el usuario lleno todos los campos, en caso contrario retorna una ventana que llene los campos
-        facilitadora,
-        seccion,
-        fecha,
-        horario,
-        nyap,
-        telefono_normalizado,
-        email
-    ]):
-        return RedirectResponse(
-            (
-                "/reservas"
-                "?mensaje=Completa+todos+los+campos"
-                "&tipo=warning"
-            ),
-            status_code=303
-        )
-
-    if not telefono_normalizado.isdigit(): #aca pregunta si el telefono es solo digitos por ej no acepta 5967g065
-        return RedirectResponse(
-            (
-                "/reservas"
-                "?mensaje=El+telefono+no+es+valido"
-                "&tipo=warning"
-            ),
-            status_code=303 
-        )
-
     try:
+        reserva = Reserva(
+                    facilitadora=facilitadora,
+                    seccion=seccion,
+                    fecha=fecha,
+                    horario=horario,
+                    nyap=nyap,
+                    email=email,
+                    telefono=telefono_normalizado
+                )
+
+        reserva.validar()
+
         conn, cursor = get_db()
 
         repositorio_reserva = RepositorioReserva(
@@ -217,17 +221,7 @@ def realizar_reserva(
                 status_code=303
             )
 
-        reserva = Reserva(
-            facilitadora=facilitadora,
-            seccion=seccion,
-            fecha=fecha,
-            horario=horario,
-            nyap=nyap,
-            email=email,
-            telefono=telefono_normalizado
-        )
-
-        # Guardamos primero en PostgreSQL
+        # Guardamos primero en la bdd
         repositorio_reserva.crear_reserva(
             reserva
         )
@@ -267,6 +261,18 @@ def realizar_reserva(
                 "/reservas"
                 "?mensaje=Turno+reservado+correctamente"
                 "&tipo=success"
+            ),
+            status_code=303
+        )
+
+    except ValueError as error:
+        print("ERROR DE VALIDACION:", repr(error))
+
+        return RedirectResponse(
+            url=(
+                "/reservas"
+                f"?mensaje={str(error)}"
+                "&tipo=warning"
             ),
             status_code=303
         )
