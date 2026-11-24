@@ -28,6 +28,10 @@ CLOUDINARY_API_SECRET = os.getenv(
     "CLOUDINARY_API_SECRET"
 )
 
+GOOGLE_SESSION_SECRET = os.getenv(
+    "GOOGLE_SESSION_SECRET"
+)
+
 # Configuración de Cloudinary
 cloudinary.config(
     cloud_name=CLOUDINARY_CLOUD_NAME,

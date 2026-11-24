@@ -31,7 +31,7 @@ def contexto_sesion(request: Request): #devuelve el idUsuario y el rol
         "es_admin": rol_usuario == "admin"
     }
 
-@router.get("/info_secciones", response_class=HTMLResponse)
+@router.get("/infoSecciones", response_class=HTMLResponse)
 def mostrar_seccion(request: Request):
 
     conn, cursor = get_db()
@@ -200,11 +200,11 @@ class RepositorioSeccion:
             self.cursor = cursor
     
     def obtener_todos(self):
-            self.cursor.execute(""" #devuelve todas las secciones
+            self.cursor.execute("""
                 SELECT *
                 FROM seccion
                 ORDER BY idseccion
-            """)
+            """)  #devuelve todas las secciones
     
             return self.cursor.fetchall()
 
